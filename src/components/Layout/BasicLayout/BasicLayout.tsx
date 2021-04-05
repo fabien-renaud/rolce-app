@@ -1,4 +1,5 @@
-import {Header, Sidebar} from '../../index';
+import {Header} from '../../Header';
+import {Sidebar} from '../../Sidebar';
 import './BasicLayout.scss';
 
 const BasicLayout = (props) => {

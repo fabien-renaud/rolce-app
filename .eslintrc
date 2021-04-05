@@ -1,9 +1,11 @@
 {
     "extends": [
-        "airbnb",
-        "node",
+        "airbnb-typescript",
         "prettier"
     ],
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
     "plugins": ["prettier"],
     "env": {
         "browser": true
@@ -11,12 +13,13 @@
     "settings": {
         "import/resolver": {
             "node": {
-                "extensions": [".js", ".jsx"],
+                "extensions": [".ts", ".tsx"],
                 "paths": ["src"]
             }
         }
     },
     "rules": {
+        "arrow-body-style": "off",
         "indent": ["error", 4],
         "import/prefer-default-export": "off",
         "prettier/prettier": ["error"],

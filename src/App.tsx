@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import {CssBaseline} from '@material-ui/core';
 import {Contract, Search} from './pages';
 import './App.scss';
 
