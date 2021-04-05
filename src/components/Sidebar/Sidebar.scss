@@ -1,0 +1,8 @@
+.sidebar {
+    flex-shrink: 0 !important;
+    width: 240px;
+
+    &-items {
+        width: 240px;
+    }
+}

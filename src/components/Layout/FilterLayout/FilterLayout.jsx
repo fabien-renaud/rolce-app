@@ -1,16 +1,14 @@
 import {Container} from '@material-ui/core';
-import {NavBar} from '../NavBar';
-import './BasicLayout.scss';
+import './FilterLayout.scss';
 
-const BasicLayout = (props) => {
+const FilterLayout = (props) => {
     const {children} = props;
 
     return (
         <>
-            <NavBar />
             <Container className="container">{children}</Container>
         </>
     );
 };
 
-export default BasicLayout;
+export default FilterLayout;
