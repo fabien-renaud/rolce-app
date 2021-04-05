@@ -1,12 +1,16 @@
-import {Container} from '@material-ui/core';
+import {ReactNode} from 'react';
 import './FilterLayout.scss';
 
-const FilterLayout = (props) => {
+type BasicLayoutProps = {
+    children: ReactNode;
+};
+
+const FilterLayout = (props: BasicLayoutProps) => {
     const {children} = props;
 
     return (
         <>
-            <Container className="container">{children}</Container>
+            <div>{children}</div>
         </>
     );
 };

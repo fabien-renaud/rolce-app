@@ -1,8 +1,13 @@
+import {ReactNode} from 'react';
 import {Header} from '../../Header';
 import {Sidebar} from '../../Sidebar';
 import './BasicLayout.scss';
 
-const BasicLayout = (props) => {
+type BasicLayoutProps = {
+    children: ReactNode;
+};
+
+const BasicLayout = (props: BasicLayoutProps) => {
     const {children} = props;
 
     return (

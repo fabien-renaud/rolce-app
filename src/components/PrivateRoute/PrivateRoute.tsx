@@ -1,6 +1,11 @@
 import {Redirect, Route} from 'react-router-dom';
 
-const PrivateRoute = (props) => {
+type BasicLayoutProps = {
+    path: string;
+    component: any;
+};
+
+const PrivateRoute = (props: BasicLayoutProps) => {
     const {path, component: Component} = props;
     const authenticated = true;
 
