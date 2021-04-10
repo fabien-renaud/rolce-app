@@ -1,38 +1,31 @@
 import {Link} from 'react-router-dom';
-import {Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar} from '@material-ui/core';
-import {Book, Search} from '@material-ui/icons';
-import './Sidebar.scss';
+import {Menu} from 'antd';
+import {ProjectOutlined, SearchOutlined} from '@ant-design/icons';
 
 const Sidebar = () => {
     const menuItems = [
         {
-            text: 'Contract',
+            text: 'Contrats',
             href: '/contract',
-            Icon: Book
+            icon: <ProjectOutlined />
         },
         {
-            text: 'Search',
+            text: 'Rechercher',
             href: '/search',
-            Icon: Search
+            icon: <SearchOutlined />
         }
     ];
 
     return (
-        <Drawer className="sidebar" variant="permanent">
-            <Toolbar className="toolbar" />
-            <List className="sidebar-items">
-                {menuItems.map(({text, href, Icon}) => (
+        <Menu mode="vertical" theme="light">
+            {menuItems.map(({text, href, icon}) => (
+                <Menu.Item icon={icon}>
                     <Link to={href} key={text}>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <Icon />
-                            </ListItemIcon>
-                            <ListItemText>{text}</ListItemText>
-                        </ListItem>
+                        {text}
                     </Link>
-                ))}
-            </List>
-        </Drawer>
+                </Menu.Item>
+            ))}
+        </Menu>
     );
 };
 

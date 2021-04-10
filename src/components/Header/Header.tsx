@@ -1,14 +1,7 @@
-import {AppBar, Toolbar, Typography} from '@material-ui/core';
-import './Header.scss';
+import {Typography} from 'antd';
 
 const Header = () => {
-    return (
-        <AppBar id="appbar" position="fixed" color="secondary">
-            <Toolbar className="toolbar">
-                <Typography variant="h6">Rolce</Typography>
-            </Toolbar>
-        </AppBar>
-    );
+    return <Typography.Title level={1}>Rolce</Typography.Title>;
 };
 
 export default Header;

@@ -1,7 +1,7 @@
 import {ReactNode} from 'react';
+import {Layout} from 'antd';
 import {Header} from '../../Header';
 import {Sidebar} from '../../Sidebar';
-import './BasicLayout.scss';
 
 type BasicLayoutProps = {
     children: ReactNode;
@@ -11,11 +11,17 @@ const BasicLayout = (props: BasicLayoutProps) => {
     const {children} = props;
 
     return (
-        <div id="root">
-            <Header />
-            <Sidebar />
-            <div className="content">{children}</div>
-        </div>
+        <Layout>
+            <Layout.Header style={{backgroundColor: '#fff', borderBottom: '1px solid #eee'}}>
+                <Header />
+            </Layout.Header>
+            <Layout>
+                <Layout.Sider collapsible theme="light">
+                    <Sidebar />
+                </Layout.Sider>
+                <Layout.Content style={{backgroundColor: '#fff'}}>{children}</Layout.Content>
+            </Layout>
+        </Layout>
     );
 };
 

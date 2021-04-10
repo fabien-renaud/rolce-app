@@ -1,13 +1,11 @@
-import {Typography} from '@material-ui/core';
+import {Typography} from 'antd';
 import {BasicLayout} from '../../components';
 
 const Search = () => {
     return (
         <BasicLayout>
             <section>
-                <Typography component="h1" variant="h3">
-                    Search
-                </Typography>
+                <Typography.Title level={2}>Search</Typography.Title>
             </section>
         </BasicLayout>
     );

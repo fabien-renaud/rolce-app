@@ -1,5 +1,4 @@
 import {ReactNode} from 'react';
-import './FilterLayout.scss';
 
 type BasicLayoutProps = {
     children: ReactNode;

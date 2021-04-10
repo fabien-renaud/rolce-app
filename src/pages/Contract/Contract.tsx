@@ -1,13 +1,11 @@
-import {Typography} from '@material-ui/core';
+import {Typography} from 'antd';
 import {BasicLayout} from '../../components';
 
 const Contract = () => {
     return (
         <BasicLayout>
             <section>
-                <Typography component="h1" variant="h3">
-                    Contract
-                </Typography>
+                <Typography.Title level={2}>Contract</Typography.Title>
             </section>
         </BasicLayout>
     );
