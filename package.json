@@ -3,9 +3,9 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
+        "start": "craco start",
+        "build": "craco build",
+        "test": "craco test",
         "eject": "react-scripts eject",
         "validate:lint": "eslint src",
         "validate:prettier": "prettier --check ./src/**/*.ts",
@@ -13,8 +13,10 @@
     },
     "dependencies": {
         "@ant-design/icons": "^4.6.2",
+        "@craco/craco": "^6.1.1",
         "@reduxjs/toolkit": "^1.5.1",
         "antd": "^4.15.1",
+        "craco-less": "^1.17.1",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-redux": "^7.2.3",
