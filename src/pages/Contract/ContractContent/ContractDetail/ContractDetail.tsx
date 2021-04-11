@@ -7,7 +7,7 @@ const ContractDetail = () => {
                 <Collapse defaultActiveKey={['detail', 'comment']} ghost>
                     <Collapse.Panel key="detail" header={<Typography.Text strong>Détail</Typography.Text>}>
                         <Descriptions column={1} size="small">
-                            <Descriptions.Item label="Status">
+                            <Descriptions.Item label="Statut">
                                 <Tag color="cyan">Négociation</Tag>
                             </Descriptions.Item>
                             <Descriptions.Item label="Date de début">01/01/2022</Descriptions.Item>
