@@ -19,10 +19,8 @@ const Sidebar = () => {
     return (
         <Menu mode="vertical" theme="light">
             {menuItems.map(({text, href, icon}) => (
-                <Menu.Item icon={icon}>
-                    <Link to={href} key={text}>
-                        {text}
-                    </Link>
+                <Menu.Item icon={icon} key={text}>
+                    <Link to={href}>{text}</Link>
                 </Menu.Item>
             ))}
         </Menu>

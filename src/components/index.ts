@@ -1,4 +1,4 @@
 export * from './Header';
-export * from './Layout';
+export * from './BasicLayout';
 export * from './PrivateRoute';
 export * from './Sidebar';

@@ -1,7 +1,7 @@
 import {ReactNode} from 'react';
 import {Layout} from 'antd';
-import {Header} from '../../Header';
-import {Sidebar} from '../../Sidebar';
+import {Header} from '../Header';
+import {Sidebar} from '../Sidebar';
 
 type BasicLayoutProps = {
     children: ReactNode;

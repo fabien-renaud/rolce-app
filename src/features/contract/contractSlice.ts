@@ -1,13 +1,23 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {Contract} from './contractType';
+import {createEntityAdapter, createSlice, EntityState} from '@reduxjs/toolkit';
+import {Contract, ContractMeta} from './contractType';
+
+const contractMetadataAdapter = createEntityAdapter<ContractMeta>({
+    selectId: (contractMeta) => contractMeta.reference
+});
+
+const contractAdapter = createEntityAdapter<Contract>({
+    selectId: (contract) => contract.reference
+});
 
 type ContractState = {
-    data: Contract[];
+    contractsMetadata: EntityState<ContractMeta>;
+    contracts: EntityState<Contract>;
     isLoading: boolean;
 };
 
 const initialState: ContractState = {
-    data: [],
+    contractsMetadata: contractMetadataAdapter.getInitialState(),
+    contracts: contractAdapter.getInitialState(),
     isLoading: false
 };
 
@@ -15,9 +25,14 @@ export const contractSlice = createSlice({
     name: 'contract',
     initialState,
     reducers: {
-        save: (state) => state
+        addContractMetadata: (state, action) => {
+            contractMetadataAdapter.addMany(state.contractsMetadata, action.payload);
+        },
+        addContracts: (state, action) => {
+            contractAdapter.addOne(state.contracts, action.payload);
+        }
     }
 });
 
-export const {save} = contractSlice.actions;
+export const {addContractMetadata, addContracts} = contractSlice.actions;
 export default contractSlice.reducer;
