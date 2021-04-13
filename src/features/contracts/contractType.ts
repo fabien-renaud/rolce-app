@@ -1,9 +1,3 @@
-export type ContractMeta = {
-    reference: string;
-    name: string;
-    accountName: string;
-};
-
 export type Contract = {
     id: string;
     type: string;

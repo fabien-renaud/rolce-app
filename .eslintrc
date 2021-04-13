@@ -1,8 +1,5 @@
 {
-    "extends": [
-        "airbnb-typescript",
-        "prettier"
-    ],
+    "extends": ["airbnb-typescript", "prettier"],
     "parserOptions": {
         "project": "./tsconfig.json"
     },
@@ -22,6 +19,13 @@
         "arrow-body-style": "off",
         "indent": ["error", 4],
         "import/prefer-default-export": "off",
+        "no-param-reassign": [
+            "error",
+            {
+                "props": true,
+                "ignorePropertyModificationsFor": ["state"]
+            }
+        ],
         "prettier/prettier": ["error"],
         "react/jsx-indent": ["error", 4],
         "react/jsx-indent-props": ["error", 4],

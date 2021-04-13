@@ -1,13 +1,13 @@
 import {useEffect} from 'react';
 import {Layout} from 'antd';
+import {useContractMetadata} from '../../features/contractMetadata/useContractMetadata';
 import {BasicLayout} from '../../components';
 import {ContractFilter} from './ContractFilter';
 import {ContractList} from './ContractList';
 import {ContractContent} from './ContractContent';
-import {useContract} from '../../features/contract/useContract';
 
 const Contract = () => {
-    const {fetchContractsMeta} = useContract();
+    const {fetchContractsMeta} = useContractMetadata();
 
     useEffect(() => {
         fetchContractsMeta();

@@ -1,9 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit';
-import contractReducer from '../features/contract/contractSlice';
+import contractMetadataReducer from '../features/contractMetadata/contractMetadataSlice';
+import contractsReducer from '../features/contracts/contractsSlice';
 
 const store = configureStore({
     reducer: {
-        contract: contractReducer
+        contractMetadata: contractMetadataReducer,
+        contracts: contractsReducer
     }
 });
 

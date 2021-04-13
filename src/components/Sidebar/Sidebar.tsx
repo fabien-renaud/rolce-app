@@ -6,7 +6,7 @@ const Sidebar = () => {
     const menuItems = [
         {
             text: 'Contrats',
-            href: '/contract',
+            href: '/contracts',
             icon: <ProjectOutlined />
         },
         {

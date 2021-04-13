@@ -8,11 +8,11 @@ const ContractContent = () => {
         itemRender: ({path, breadcrumbName}: any) => <Link to={path}>{breadcrumbName}</Link>,
         routes: [
             {
-                path: '/contract/netflix',
+                path: '/contracts/netflix',
                 breadcrumbName: 'Netflix'
             },
             {
-                path: '/contract/netflix/NET-2878',
+                path: '/contracts/netflix/NET-2878',
                 breadcrumbName: 'NET-2878'
             }
         ]

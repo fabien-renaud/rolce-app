@@ -1,30 +1,20 @@
-import {Menu} from 'antd';
 import {Link} from 'react-router-dom';
+import {Menu} from 'antd';
+import {useContractMetadata} from '../../../features/contractMetadata/useContractMetadata';
 
 const ContractList = () => {
-    const menuItems = [
-        {
-            id: 'NET-2878',
-            text: 'Mise à jour de la politique de mot de passe',
-            href: '/contract/netflix/NET-2878'
-        },
-        {
-            id: 'NET-2879',
-            text: 'Ajout de la page mes commandes',
-            href: '/contract/netflix/NET-2879'
-        }
-    ];
+    const {contractMetadata} = useContractMetadata();
 
     return (
         <Menu mode="vertical" theme="light">
-            {menuItems.map((menuItem) => {
-                const {id, text, href} = menuItem;
+            {contractMetadata.map((metadata) => {
+                const {reference, name} = metadata;
                 return (
                     <>
                         <Menu.Item>
-                            <Link to={href} key={text}>
-                                <span>{id}</span>
-                                <p>{text}</p>
+                            <Link to={`/contract/${reference}`} key={reference}>
+                                <span>{reference}</span>
+                                <p>{name}</p>
                             </Link>
                         </Menu.Item>
                         <Menu.Divider />

@@ -7,9 +7,9 @@ const App = () => {
         <>
             <Router>
                 <Switch>
-                    <Route path="/contract" component={Contract} />
+                    <Route path="/contracts" component={Contract} />
                     <Route path="/search" component={Search} />
-                    <Redirect to={{pathname: '/contract'}} />
+                    <Redirect to={{pathname: '/contracts'}} />
                 </Switch>
             </Router>
         </>
