@@ -17,7 +17,7 @@ const ContractList = () => {
                 return (
                     <>
                         <Menu.Item key={reference}>
-                            <Link to={`/contract/${reference}`}>
+                            <Link to={`/contracts/${reference}`}>
                                 <span>{reference}</span>
                                 <p>{name}</p>
                             </Link>
