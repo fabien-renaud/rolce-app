@@ -17,9 +17,8 @@ const ContractDetail = () => {
                     </Collapse.Panel>
                     <Collapse.Panel key="comment" header={<Typography.Text strong>Commentaire</Typography.Text>}>
                         <Typography.Text>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus condimentum, mauris a
-                            tempus ultricies, neque risus pellentesque elit, tincidunt vehicula lorem odio eu nisl.
-                            Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus at mi ut metus
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus condimentum, mauris a tempus ultricies, neque risus pellentesque
+                            elit, tincidunt vehicula lorem odio eu nisl. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus at mi ut metus
                             interdum molestie vitae nec sapien. Sed ultrices pharetra lobortis.
                         </Typography.Text>
                     </Collapse.Panel>

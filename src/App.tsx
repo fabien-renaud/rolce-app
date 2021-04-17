@@ -7,6 +7,7 @@ const App = () => {
         <>
             <Router>
                 <Switch>
+                    <Route path="/contracts/:reference" component={Contract} />
                     <Route path="/contracts" component={Contract} />
                     <Route path="/search" component={Search} />
                     <Redirect to={{pathname: '/contracts'}} />

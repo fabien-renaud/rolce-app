@@ -1,10 +1,8 @@
-import {createAsyncThunk, createEntityAdapter, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createEntityAdapter, createSlice, EntityId} from '@reduxjs/toolkit';
 import contractService from './contractService';
 import {Contract} from './contractType';
 
-export const fetchContract = createAsyncThunk('contractMetadata/fetchAll', async (reference: string) =>
-    contractService.fetchById(reference)
-);
+export const fetchContractById = createAsyncThunk('contract/fetchById', async (reference: EntityId) => contractService.fetchById(reference));
 
 const contractsAdapter = createEntityAdapter<Contract>({
     selectId: (contract) => contract.reference
@@ -17,10 +15,10 @@ export const contractsSlice = createSlice({
     }),
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(fetchContract.pending, (state) => {
+        builder.addCase(fetchContractById.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(fetchContract.fulfilled, (state, action) => {
+        builder.addCase(fetchContractById.fulfilled, (state, action) => {
             if (action.payload) contractsAdapter.upsertOne(state, action.payload);
             state.loading = false;
         });

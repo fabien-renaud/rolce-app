@@ -5,7 +5,7 @@ import {ContractMetadata} from './contractMetadataType';
 export const fetchContractMetadata = createAsyncThunk('contractMetadata/fetchAll', contractMetadataService.fetchAll);
 
 const contractMetadataAdapter = createEntityAdapter<ContractMetadata>({
-    selectId: (contractMeta) => contractMeta.reference
+    selectId: (metadata) => metadata.reference
 });
 
 export const contractMetadataSlice = createSlice({

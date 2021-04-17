@@ -1,9 +1,17 @@
 import {Link} from 'react-router-dom';
 import {PageHeader} from 'antd';
+import {Contract} from '../../../features/contracts/contractType';
 import {ContractDetail} from './ContractDetail';
 import {ContractRights} from './ContractRights';
 
-const ContractContent = () => {
+type ContractContentProps = {
+    contract: Contract | undefined;
+};
+
+const ContractContent = (props: ContractContentProps) => {
+    const {contract} = props;
+    console.log(contract);
+
     const breadcrumb = {
         itemRender: ({path, breadcrumbName}: any) => <Link to={path}>{breadcrumbName}</Link>,
         routes: [

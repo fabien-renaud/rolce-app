@@ -1,12 +1,14 @@
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchContractMetadata, selectAllContractMetadata} from './contractMetadataSlice';
+import {fetchContractMetadata, selectAllContractMetadata, selectContractMetadataIds} from './contractMetadataSlice';
 
 export const useContractMetadata = () => {
     const dispatch = useDispatch();
     const contractMetadata = useSelector(selectAllContractMetadata);
+    const contractMetadataIds = useSelector(selectContractMetadataIds);
 
     return {
         contractMetadata,
-        fetchContractsMeta: () => dispatch(fetchContractMetadata())
+        contractMetadataIds,
+        fetchContractMetadata: () => dispatch(fetchContractMetadata())
     };
 };

@@ -1,14 +1,13 @@
-import {useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {Menu} from 'antd';
-import {useContractMetadata} from '../../../features/contractMetadata/useContractMetadata';
+import {ContractMetadata} from '../../../features/contractMetadata/contractMetadataType';
 
-const ContractList = () => {
-    const {contractMetadata, fetchContractsMeta} = useContractMetadata();
+type ContractListProps = {
+    contractMetadata: ContractMetadata[];
+};
 
-    useEffect(() => {
-        fetchContractsMeta();
-    }, []);
+const ContractList = (props: ContractListProps) => {
+    const {contractMetadata} = props;
 
     return (
         <Menu mode="vertical" theme="light">
