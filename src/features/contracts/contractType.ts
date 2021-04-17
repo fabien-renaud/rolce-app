@@ -1,7 +1,7 @@
 export type Contract = {
     id: string;
     type: string;
-    status: string;
+    status: ContractStatus;
     name: string;
     reference: string;
     accountName: string;
@@ -13,3 +13,5 @@ export type Contract = {
     createdAt: string;
     updatedAt: string;
 };
+
+export type ContractStatus = 'INTEREST' | 'NEGOTIATION' | 'SIGNED';

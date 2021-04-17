@@ -5,12 +5,11 @@ import {ContractDetail} from './ContractDetail';
 import {ContractRights} from './ContractRights';
 
 type ContractContentProps = {
-    contract: Contract | undefined;
+    contract: Contract;
 };
 
 const ContractContent = (props: ContractContentProps) => {
     const {contract} = props;
-    console.log(contract);
 
     const breadcrumb = {
         itemRender: ({path, breadcrumbName}: any) => <Link to={path}>{breadcrumbName}</Link>,
@@ -33,7 +32,7 @@ const ContractContent = (props: ContractContentProps) => {
                 avatar={{src: 'https://avatars.githubusercontent.com/u/23161632?v=4'}}
                 breadcrumb={breadcrumb}
             />
-            <ContractDetail />
+            <ContractDetail status={contract.status} />
             <ContractRights />
         </>
     );

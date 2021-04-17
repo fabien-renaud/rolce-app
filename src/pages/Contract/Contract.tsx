@@ -46,9 +46,7 @@ const Contract = () => {
                             <Layout.Sider width={300}>
                                 <ContractList contractMetadata={contractMetadata} />
                             </Layout.Sider>
-                            <Layout.Content>
-                                <ContractContent contract={selectedContract} />
-                            </Layout.Content>
+                            <Layout.Content>{selectedContract && <ContractContent contract={selectedContract} />}</Layout.Content>
                         </Layout>
                     </Layout>
                 </section>

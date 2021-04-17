@@ -1,6 +1,14 @@
-import {Col, Collapse, Descriptions, Row, Tag, Typography} from 'antd';
+import {Col, Collapse, Descriptions, Row, Typography} from 'antd';
+import {ContractStatus} from '../../../../features/contracts/contractType';
+import ContractDetailTagStatus from './ContractDetailTagStatus';
 
-const ContractDetail = () => {
+type ContractDetailProps = {
+    status: ContractStatus;
+};
+
+const ContractDetail = (props: ContractDetailProps) => {
+    const {status} = props;
+
     return (
         <Row>
             <Col span={12}>
@@ -8,7 +16,7 @@ const ContractDetail = () => {
                     <Collapse.Panel key="detail" header={<Typography.Text strong>Détail</Typography.Text>}>
                         <Descriptions column={1} size="small">
                             <Descriptions.Item label="Statut">
-                                <Tag color="cyan">Négociation</Tag>
+                                <ContractDetailTagStatus status={status} />
                             </Descriptions.Item>
                             <Descriptions.Item label="Date de début">01/01/2022</Descriptions.Item>
                             <Descriptions.Item label="Date de fin">31/12/2022</Descriptions.Item>
