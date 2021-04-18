@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom';
-import {PageHeader} from 'antd';
+import {PageHeader, Typography} from 'antd';
 import {Contract} from '../../../features/contracts/contractType';
 import {ContractDetail} from './ContractDetail';
 import {ContractRights} from './ContractRights';
@@ -28,7 +28,7 @@ const ContractContent = (props: ContractContentProps) => {
     return (
         <>
             <PageHeader
-                title="[NET-2878] Mise à jour de la politique de mot de passe"
+                title={<Typography>{`[${contract.reference}] ${contract.name}`}</Typography>}
                 avatar={{src: 'https://avatars.githubusercontent.com/u/23161632?v=4'}}
                 breadcrumb={breadcrumb}
             />
