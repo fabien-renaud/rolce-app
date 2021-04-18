@@ -1,6 +1,6 @@
 export type Contract = {
     id: string;
-    type: string;
+    type: ContractType;
     status: ContractStatus;
     name: string;
     reference: string;
@@ -10,8 +10,9 @@ export type Contract = {
     endAt: string;
     totalAmount: number;
     currencyIso: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
 };
 
+export type ContractType = 'ACQUISITION' | 'SALE';
 export type ContractStatus = 'INTEREST' | 'NEGOTIATION' | 'SIGNED';

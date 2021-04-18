@@ -32,7 +32,7 @@ const ContractContent = (props: ContractContentProps) => {
                 avatar={{src: 'https://avatars.githubusercontent.com/u/23161632?v=4'}}
                 breadcrumb={breadcrumb}
             />
-            <ContractDetail status={contract.status} />
+            <ContractDetail contract={contract} />
             <ContractRights />
         </>
     );
