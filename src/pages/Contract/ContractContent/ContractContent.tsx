@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 import {PageHeader, Typography} from 'antd';
-import {Contract} from '../../../features/contracts/contractType';
+import {Contract} from 'features/contracts/contractType';
 import {ContractDetail} from './ContractDetail';
 import {ContractRights} from './ContractRights';
 

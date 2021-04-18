@@ -1,6 +1,5 @@
 import {Tag} from 'antd';
-import {ContractStatus} from '../../../../features/contracts/contractType';
-import {CONTRACT_STATUS} from '../../../../features/contracts/contractConstants';
+import {ContractStatus, CONTRACT_STATUS} from 'features/contracts';
 
 type ContractDetailStatusProps = {
     status: ContractStatus;

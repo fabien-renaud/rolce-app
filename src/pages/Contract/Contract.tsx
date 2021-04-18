@@ -2,9 +2,9 @@ import {useEffect, useMemo} from 'react';
 import {Redirect, useParams} from 'react-router-dom';
 import {EntityId} from '@reduxjs/toolkit';
 import {Layout} from 'antd';
-import {useContractMetadata} from '../../features/contractMetadata/useContractMetadata';
-import {useContracts} from '../../features/contracts/useContracts';
-import {BasicLayout} from '../../components';
+import {useContractMetadata} from 'features/contractMetadata';
+import {useContracts} from 'features/contracts';
+import {FilterLayout} from 'components';
 import {ContractFilter} from './ContractFilter';
 import {ContractList} from './ContractList';
 import {ContractContent} from './ContractContent';
@@ -36,7 +36,7 @@ const Contract = () => {
     return (
         <>
             {redirectIfNoReference}
-            <BasicLayout>
+            <FilterLayout>
                 <section>
                     <Layout>
                         <Layout.Header>
@@ -50,7 +50,7 @@ const Contract = () => {
                         </Layout>
                     </Layout>
                 </section>
-            </BasicLayout>
+            </FilterLayout>
         </>
     );
 };

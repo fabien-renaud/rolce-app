@@ -1,8 +1,7 @@
 import {Col, Collapse, Descriptions, Row, Typography} from 'antd';
-import {Contract} from '../../../../features/contracts/contractType';
+import {Contract, CONTRACT_TYPE} from 'features/contracts';
+import {dateToDateReadable} from 'utils/date';
 import ContractDetailTagStatus from './ContractDetailTagStatus';
-import {CONTRACT_TYPE} from '../../../../features/contracts/contractConstants';
-import {dateToDateReadable} from '../../../../utils/date';
 
 type ContractDetailProps = {
     contract: Contract;

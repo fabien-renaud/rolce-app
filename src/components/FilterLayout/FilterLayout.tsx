@@ -1,13 +1,12 @@
 import {ReactNode} from 'react';
 import {Layout} from 'antd';
-import {Header} from '../Header';
-import {Sidebar} from '../Sidebar';
+import {Header, Sidebar} from 'components';
 
-type BasicLayoutProps = {
+type FilterLayoutProps = {
     children: ReactNode;
 };
 
-const BasicLayout = (props: BasicLayoutProps) => {
+const FilterLayout = (props: FilterLayoutProps) => {
     const {children} = props;
 
     return (
@@ -25,4 +24,4 @@ const BasicLayout = (props: BasicLayoutProps) => {
     );
 };
 
-export default BasicLayout;
+export default FilterLayout;

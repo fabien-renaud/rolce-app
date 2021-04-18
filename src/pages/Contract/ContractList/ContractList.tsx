@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 import {Menu} from 'antd';
-import {ContractMetadata} from '../../../features/contractMetadata/contractMetadataType';
+import {ContractMetadata} from 'features/contractMetadata';
 
 type ContractListProps = {
     contractMetadata: ContractMetadata[];
