@@ -1,4 +1,5 @@
 import {createAsyncThunk, createEntityAdapter, createSlice, EntityId} from '@reduxjs/toolkit';
+import {State} from 'store';
 import contractService from './contractService';
 import {Contract} from './contractType';
 
@@ -33,7 +34,4 @@ export const {
     selectAll: selectAllContract,
     selectTotal: selectTotalContractTotal,
     selectById: selectContractById
-} = contractsAdapter.getSelectors((state) => {
-    // @ts-ignore
-    return state.contracts;
-});
+} = contractsAdapter.getSelectors((state: State) => state.contracts);

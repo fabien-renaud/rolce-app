@@ -1,4 +1,5 @@
 import {createAsyncThunk, createEntityAdapter, createSlice} from '@reduxjs/toolkit';
+import {State} from 'store';
 import contractMetadataService from './contractMetadataService';
 import {ContractMetadata} from './contractMetadataType';
 
@@ -33,7 +34,4 @@ export const {
     selectAll: selectAllContractMetadata,
     selectTotal: selectTotalContractMetadataTotal,
     selectById: selectContractMetadataById
-} = contractMetadataAdapter.getSelectors((state) => {
-    // @ts-ignore
-    return state.contractMetadata;
-});
+} = contractMetadataAdapter.getSelectors((state: State) => state.contractMetadata);
