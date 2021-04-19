@@ -31,6 +31,8 @@
         "react/jsx-indent-props": ["error", 4],
         "react/jsx-one-expression-per-line": ["error", {"allow": "single-child"}],
         "react/prop-types": "off",
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "react/default-props": "off",
+        "react/require-default-props": "off"
     }
 }

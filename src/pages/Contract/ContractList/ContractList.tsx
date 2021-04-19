@@ -4,13 +4,14 @@ import {ContractMetadata} from 'features/contractMetadata';
 
 type ContractListProps = {
     contractMetadata: ContractMetadata[];
+    defaultReference?: string;
 };
 
 const ContractList = (props: ContractListProps) => {
-    const {contractMetadata} = props;
+    const {contractMetadata, defaultReference} = props;
 
     return (
-        <Menu mode="vertical" theme="light">
+        <Menu mode="vertical" theme="light" defaultSelectedKeys={[defaultReference ?? '']}>
             {contractMetadata.map((metadata) => {
                 const {reference, name} = metadata;
                 return (

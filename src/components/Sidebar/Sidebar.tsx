@@ -1,8 +1,10 @@
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import {Menu} from 'antd';
 import {ProjectOutlined, SearchOutlined} from '@ant-design/icons';
 
 const Sidebar = () => {
+    const location = useLocation();
+    const route: string = /^(?<route>\/\w+)/.exec(location.pathname)?.groups?.route ?? '';
     const menuItems = [
         {
             text: 'Contrats',
@@ -17,9 +19,9 @@ const Sidebar = () => {
     ];
 
     return (
-        <Menu mode="vertical" theme="light">
+        <Menu mode="vertical" theme="light" defaultSelectedKeys={[route]}>
             {menuItems.map(({text, href, icon}) => (
-                <Menu.Item icon={icon} key={text}>
+                <Menu.Item icon={icon} key={href}>
                     <Link to={href}>{text}</Link>
                 </Menu.Item>
             ))}

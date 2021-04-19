@@ -44,7 +44,7 @@ const Contract = () => {
                         </Layout.Header>
                         <Layout>
                             <Layout.Sider width={300}>
-                                <ContractList contractMetadata={contractMetadata} />
+                                <ContractList contractMetadata={contractMetadata} defaultReference={reference} />
                             </Layout.Sider>
                             <Layout.Content>{selectedContract && <ContractContent contract={selectedContract} />}</Layout.Content>
                         </Layout>
