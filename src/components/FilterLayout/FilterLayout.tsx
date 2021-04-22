@@ -6,9 +6,7 @@ type FilterLayoutProps = {
     children: ReactNode;
 };
 
-const FilterLayout = (props: FilterLayoutProps) => {
-    const {children} = props;
-
+const FilterLayout = ({children}: FilterLayoutProps) => {
     return (
         <Layout>
             <Layout.Header>

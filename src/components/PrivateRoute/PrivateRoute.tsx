@@ -5,8 +5,7 @@ type BasicLayoutProps = {
     component: any;
 };
 
-const PrivateRoute = (props: BasicLayoutProps) => {
-    const {path, component: Component} = props;
+const PrivateRoute = ({path, component: Component}: BasicLayoutProps) => {
     const authenticated = true;
 
     return <Route path={path} render={() => (authenticated ? <Component /> : <Redirect to={{pathname: '/'}} />)} />;
