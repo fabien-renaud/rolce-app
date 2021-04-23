@@ -1,0 +1,51 @@
+[
+  {
+    "id": "624b1e1d-1d14-491a-b82e-f4b501b39897",
+    "label": "Free TV",
+    "parent": null,
+    "activity": {
+      "id": "13f7bb2d-278b-4cb4-b92f-7d3e81d79a06",
+      "label": "TV"
+    }
+  },
+  {
+    "id": "d240e256-2602-45de-868f-b683934ea716",
+    "label": "Pay TV",
+    "parent": null,
+    "activity": {
+      "id": "13f7bb2d-278b-4cb4-b92f-7d3e81d79a06",
+      "label": "TV"
+    }
+  },
+  {
+    "id": "4636d975-0938-453b-95de-c289ed4e2a6e",
+    "label": "VOD",
+    "parent": null,
+    "activity": {
+      "id": "28a02ec1-0917-4eba-8ed8-975230d922f6",
+      "label": "Streaming"
+    }
+  },
+  {
+    "id": "095236b5-a13a-44d4-ab46-17c0f3cfcd26",
+    "label": "SVOD",
+    "parent": {
+      "id": "4636d975-0938-453b-95de-c289ed4e2a6e"
+    },
+    "activity": {
+      "id": "28a02ec1-0917-4eba-8ed8-975230d922f6",
+      "label": "Streaming"
+    }
+  },
+  {
+    "id": "32f42716-afbb-41c7-87a1-0aaa9bdd41d0",
+    "label": "FREE VOD",
+    "parent": {
+      "id": "4636d975-0938-453b-95de-c289ed4e2a6e"
+    },
+    "activity": {
+      "id": "28a02ec1-0917-4eba-8ed8-975230d922f6",
+      "label": "Streaming"
+    }
+  }
+]
