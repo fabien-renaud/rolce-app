@@ -1,11 +1,13 @@
 import {configureStore} from '@reduxjs/toolkit';
 import contractMetadataReducer from 'features/contractMetadata/contractMetadataSlice';
 import contractsReducer from 'features/contracts/contractsSlice';
+import languagesReducer from 'features/languages/languagesSlice';
 
 const store = configureStore({
     reducer: {
         contractMetadata: contractMetadataReducer,
-        contracts: contractsReducer
+        contracts: contractsReducer,
+        languages: languagesReducer
     }
 });
 
