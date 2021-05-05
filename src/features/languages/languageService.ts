@@ -1,20 +1,15 @@
 import {Language} from './languageType';
 import languages from './languages.json';
-import {PaginatedType} from '../../utils/paginatedType';
 
-const fetchAll = async (offset: number, limit: number, name: string): Promise<PaginatedType<Language> | null> =>
-    new Promise<PaginatedType<Language> | null>((resolve) => {
+const fetchAll = async (offset: number, limit: number, name: any): Promise<Language[]> =>
+    new Promise<Language[]>((resolve) => {
         const data = languages
-            .filter((language: Language) => language.value.includes(name))
+            .filter((language: Language) => (name ? language.value.includes(name) : true))
             .map((language: Language) => ({
                 id: language.id,
                 value: language.value
             }));
-        const count = data.length;
-        resolve({
-            data: data.slice(offset, limit),
-            count
-        });
+        resolve(data.slice(offset, limit));
     });
 
 export default {
