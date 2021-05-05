@@ -1,7 +1,7 @@
 import {Language} from './languageType';
 import languages from './languages.json';
 
-const fetchAll = async (offset: number, limit: number, name: any): Promise<Language[]> =>
+const fetchAll = async (offset: number, limit: number, name: string): Promise<Language[]> =>
     new Promise<Language[]>((resolve) => {
         const data = languages
             .filter((language: Language) => (name ? language.value.includes(name) : true))

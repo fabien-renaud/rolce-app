@@ -1,5 +1,5 @@
 export type Territory = {
     id: string;
-    label: string;
-    parent: Territory;
+    label?: string;
+    parent?: Territory;
 };
