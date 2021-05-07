@@ -3,12 +3,13 @@ import {State} from 'store';
 import {Territory} from './territoryType';
 import {fetchAllTerritories, selectAllTerritories} from './territoriesSlice';
 
-export const useTerritories = (offset?: number, limit?: number, name?: string) => {
+export const useTerritories = () => {
     const dispatch = useDispatch();
     const territories: Territory[] = useSelector((state: State) => selectAllTerritories(state));
 
     return {
         territories,
-        fetchTerritories: () => dispatch(fetchAllTerritories({offset, limit, name}))
+        fetchTerritories: (offset?: number, limit?: number, fields?: string[], filters?: {key: string; value: string}[]) =>
+            dispatch(fetchAllTerritories({offset, limit, fields, filters}))
     };
 };
