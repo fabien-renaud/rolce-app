@@ -7,7 +7,7 @@ type FetchAllParameters = {
     offset?: number;
     limit?: number;
     fields?: string[];
-    filters?: {key: string; value: string}[];
+    filters?: {key: string; value: string | null}[];
 };
 
 export const fetchAllTerritories = createAsyncThunk('territory/fetchAll', async ({offset, limit, fields, filters}: FetchAllParameters) =>

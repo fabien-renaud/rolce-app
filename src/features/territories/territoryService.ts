@@ -1,6 +1,6 @@
 import {Territory} from './territoryType';
 
-const fetchAll = async (offset?: number, limit?: number, fields?: string[], filters?: {key: string; value: string}[]): Promise<Territory[]> => {
+const fetchAll = async (offset?: number, limit?: number, fields?: string[], filters?: {key: string; value: string | null}[]): Promise<Territory[]> => {
     const urlFilters: string | undefined = filters?.reduce((acc, {key, value}) => `${acc}&${key}=${value}`, '');
     const urlFields: string | undefined = fields?.join(',');
     const response: Response = await fetch(

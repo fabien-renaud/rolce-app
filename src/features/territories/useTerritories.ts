@@ -9,7 +9,7 @@ export const useTerritories = () => {
 
     return {
         territories,
-        fetchTerritories: (offset?: number, limit?: number, fields?: string[], filters?: {key: string; value: string}[]) =>
+        fetchTerritories: (offset?: number, limit?: number, fields?: string[], filters?: {key: string; value: string | null}[]) =>
             dispatch(fetchAllTerritories({offset, limit, fields, filters}))
     };
 };
