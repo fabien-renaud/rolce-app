@@ -3,15 +3,15 @@ import {ConfigProvider} from 'antd';
 import frFR from 'antd/lib/locale/fr_FR';
 import {Contract, Search} from './pages';
 import './App.less';
-import Modal from './components/Modal/Modal';
 import {RightForm} from './pages/Right';
+import {FormDrawer} from './components/FormDrawer';
 
 const App = () => {
     return (
         <ConfigProvider locale={frFR}>
-            <Modal cancelText="Annuler" okText="Valider" title="Création de droits" visible>
+            <FormDrawer cancelText="Annuler" submitText="Valider" title="Création de droits" visible onCancel={() => {}} onSubmit={() => {}}>
                 <RightForm />
-            </Modal>
+            </FormDrawer>
             <Router>
                 <Switch>
                     <Route path="/contracts/:reference" component={Contract} />

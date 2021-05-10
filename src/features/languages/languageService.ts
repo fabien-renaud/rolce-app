@@ -6,7 +6,7 @@ const fetchAll = async (
     fields?: string[],
     filters?: {key: string; value: string | null}[],
     orders?: {key: string; value: string | null}[]
-): Promise<Language[]> => {
+): Promise<{languages: Language[]; contentRange: string}> => {
     const urlFilters: string | undefined = filters?.reduce((acc, {key, value}) => `${acc}&${key}=${value}`, '');
     const urlOrders: string | undefined = orders?.reduce((acc, {key, value}) => `${acc}${key}.${value},`, '&order=').slice(0, -1);
     const urlFields: string | undefined = fields?.join(',');
@@ -15,11 +15,15 @@ const fetchAll = async (
             limit ? `&limit=${limit}` : ''
         }${urlFilters ?? ''}${urlOrders ?? ''}`,
         {
-            method: 'GET'
+            method: 'GET',
+            headers: {Prefer: 'count=exact'}
         }
     );
     if (response.ok) {
-        return (await response.json()) as Language[];
+        return {
+            languages: (await response.json()) as Language[],
+            contentRange: response.headers.get('Content-Range') ?? ''
+        };
     }
     return Promise.reject(new Error((await response.json()).message));
 };

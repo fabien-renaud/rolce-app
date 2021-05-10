@@ -1,7 +1,9 @@
-import {Col, DatePicker, Form, Row, Select, Spin, TreeSelect} from 'antd';
-import {useEffect, useState} from 'react';
+import {Button, Col, DatePicker, Divider, Form, InputNumber, Radio, Row, Select, Spin, TreeSelect} from 'antd';
+import {JSXElementConstructor, ReactElement, useEffect, useState} from 'react';
 import {Territory, useTerritories} from '../../features/territories';
 import {Nature, useNatures} from '../../features/natures';
+import {Activity} from '../../features/activities';
+import {currencyFormatter, currencyParser} from '../../utils';
 import {useLanguages} from '../../features/languages';
 
 const {SHOW_PARENT} = TreeSelect;
@@ -33,8 +35,9 @@ const RightForm = () => {
     const [territoriesTree, setTerritoriesTree] = useState<TerritoryTree[]>([]);
     const {natures, fetchNatures} = useNatures();
     const [naturesTree, setNaturesTree] = useState<NatureTree[]>([]);
-    const [activities, setActivities] = useState<Set<string>>(new Set());
-    const {fetching, languages, fetchLanguages} = useLanguages();
+    const [activities, setActivities] = useState<Activity[]>([]);
+    const {contentRange, fetching, languages, fetchLanguages} = useLanguages();
+    const [fetchingMoreLanguages, setFetchingMoreLanguages] = useState(false);
 
     useEffect(() => {
         fetchTerritories(undefined, undefined, ['id', 'code', 'label', 'parentId']);
@@ -50,8 +53,64 @@ const RightForm = () => {
         setNaturesTree(createDataTree(natures));
     }, [natures]);
 
-    const handleOnChangeNaturesTree = (naturesId: string[]) =>
-        setActivities(new Set<string>(natures.filter((nature) => naturesId.includes(nature.id)).map(({nature_activity: {label}}) => label)));
+    useEffect(() => {
+        if (!fetching) setFetchingMoreLanguages(false);
+    }, [fetching]);
+
+    const displayLanguageDropdownRender = (menu: ReactElement<any, string | JSXElementConstructor<any>>) => {
+        if (contentRange) {
+            const [current, total] = contentRange.split('/');
+            const totalNumber = parseInt(total, 10);
+            const [, max] = current.split('-');
+            const maxNumber = parseInt(max, 10);
+            const offset = maxNumber + 1;
+            if (totalNumber > offset && totalNumber > languages.length) {
+                return (
+                    <div>
+                        {menu}
+                        <Divider style={{margin: '4px 0'}} />
+                        <div style={{display: 'flex', flexWrap: 'nowrap', padding: 8, justifyContent: 'center'}}>
+                            <Button
+                                type="primary"
+                                loading={fetchingMoreLanguages}
+                                onClick={() => {
+                                    setFetchingMoreLanguages(true);
+                                    fetchLanguages(
+                                        offset,
+                                        5,
+                                        ['id', 'value'],
+                                        [],
+                                        [
+                                            {
+                                                key: 'value',
+                                                value: 'asc'
+                                            }
+                                        ]
+                                    );
+                                }}>
+                                Charger plus
+                            </Button>
+                        </div>
+                    </div>
+                );
+            }
+        }
+        return menu;
+    };
+
+    const handleOnChangeNaturesTree = (naturesId: string[]) => {
+        const uniqueActivities: Activity[] = [];
+        natures
+            .filter((nature) => naturesId.includes(nature.id))
+            .map(({nature_activity}) => ({
+                ...nature_activity,
+                value: nature_activity.label
+            }))
+            .forEach((activity) => {
+                if (!uniqueActivities.find((a) => a.id === activity.id)) uniqueActivities.push(activity);
+            });
+        setActivities(uniqueActivities);
+    };
 
     const handleOnLanguageSearch = (value: string) => {
         fetchLanguages(0, 5, ['id', 'value'], [{key: 'value', value: `like.*${value}*`}], [{key: 'value', value: 'asc'}]);
@@ -71,6 +130,42 @@ const RightForm = () => {
                     </Form.Item>
                 </Col>
             </Row>
+            <Row key="Details">
+                <Col span={12} key="ContractType">
+                    <Select
+                        defaultValue="Acquisition"
+                        options={[
+                            {
+                                value: 'Acquisition'
+                            },
+                            {
+                                value: 'Vente'
+                            },
+                            {
+                                value: 'Holdback'
+                            },
+                            {
+                                value: 'Suspension'
+                            }
+                        ]}
+                        style={{width: '100%'}}
+                    />
+                </Col>
+                <Col span={12} key="HasExclusivity">
+                    <Radio.Group
+                        defaultValue={1}
+                        options={[
+                            {label: 'Exclusif', value: 1},
+                            {label: 'Non exclusif', value: 0}
+                        ]}
+                    />
+                </Col>
+            </Row>
+            <Row key="Price">
+                <Col span={12} key="Price">
+                    <InputNumber formatter={currencyFormatter} parser={currencyParser} />
+                </Col>
+            </Row>
             <Row key="Territories">
                 <Col span={24} key="TerritoriesSelection">
                     {territoriesTree.length ? (
@@ -87,11 +182,8 @@ const RightForm = () => {
                 </Col>
             </Row>
             <Row key="Activity">
-                <Col span={12} key="ActivityLabel">
-                    Activités
-                </Col>
-                <Col span={12} key="Activity">
-                    {[...activities].reduce((acc, curr) => `${acc} ${curr} / `, '').slice(0, -3)}
+                <Col span={24} key="ActivityLabel">
+                    <Select labelInValue mode="multiple" disabled placeholder="Activités" style={{width: '100%'}} options={activities} value={activities} />
                 </Col>
             </Row>
             <Row key="Natures">
@@ -117,11 +209,13 @@ const RightForm = () => {
                             labelInValue
                             mode="multiple"
                             allowClear
+                            autoClearSearchValue={false}
                             onSearch={handleOnLanguageSearch}
                             placeholder="Rechercher une langue"
                             style={{width: '100%'}}
                             notFoundContent={fetching ? <Spin size="small" /> : null}
                             options={languages}
+                            dropdownRender={displayLanguageDropdownRender}
                         />
                     ) : null}
                 </Col>

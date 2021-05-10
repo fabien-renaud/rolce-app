@@ -7,10 +7,12 @@ export const useLanguages = () => {
     const dispatch = useDispatch();
     const languages: Language[] = useSelector((state: State) => selectAllLanguages(state));
     const fetching: boolean = useSelector((state: State) => state.languages.loading);
+    const contentRange: string = useSelector((state: State) => state.languages.contentRange);
 
     return {
         languages,
         fetching,
+        contentRange,
         fetchLanguages: (
             offset?: number,
             limit?: number,

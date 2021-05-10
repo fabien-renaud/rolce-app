@@ -13,7 +13,8 @@ const languagesAdapter = createEntityAdapter<Language>({});
 export const languagesSlice = createSlice({
     name: 'languages',
     initialState: languagesAdapter.getInitialState({
-        loading: false
+        loading: false,
+        contentRange: ''
     }),
     reducers: {},
     extraReducers: (builder) => {
@@ -21,7 +22,10 @@ export const languagesSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(fetchAllLanguages.fulfilled, (state, action) => {
-            if (action.payload) languagesAdapter.setAll(state, action.payload);
+            if (action.payload) {
+                languagesAdapter.upsertMany(state, action.payload.languages);
+                state.contentRange = action.payload.contentRange;
+            }
             state.loading = false;
         });
     }
