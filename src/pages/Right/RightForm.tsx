@@ -7,11 +7,14 @@ import {useLanguages} from '../../features/languages';
 const {SHOW_PARENT} = TreeSelect;
 
 type DataTree = {
-    children: Territory[];
+    children: DataTree[];
     value: string;
-} & (Territory | Nature);
+};
 
-const createDataTree = (dataset: Territory[]) => {
+type TerritoryTree = DataTree & Partial<Territory>;
+type NatureTree = DataTree & Partial<Nature>;
+
+const createDataTree = (dataset: Territory[] | Nature[]) => {
     const hashTable = Object.create(null);
     dataset.forEach((aData) => {
         hashTable[aData.id] = {...aData, children: [], value: aData.id};
@@ -27,14 +30,15 @@ const createDataTree = (dataset: Territory[]) => {
 const RightForm = () => {
     const [form] = Form.useForm();
     const {territories, fetchTerritories} = useTerritories();
-    const [territoriesTree, setTerritoriesTree] = useState<DataTree[]>([]);
+    const [territoriesTree, setTerritoriesTree] = useState<TerritoryTree[]>([]);
     const {natures, fetchNatures} = useNatures();
-    const [naturesTree, setNaturesTree] = useState<DataTree[]>([]);
+    const [naturesTree, setNaturesTree] = useState<NatureTree[]>([]);
+    const [activities, setActivities] = useState<Set<string>>(new Set());
     const {fetching, languages, fetchLanguages} = useLanguages();
 
     useEffect(() => {
         fetchTerritories(undefined, undefined, ['id', 'code', 'label', 'parentId']);
-        fetchNatures(undefined, undefined, ['id', 'code', 'label', 'parentId']);
+        fetchNatures(undefined, undefined, ['id', 'code', 'label', 'parentId', 'nature_activity(id, label)']);
         fetchLanguages(0, 5, ['id', 'value'], [], [{key: 'value', value: 'asc'}]);
     }, []);
 
@@ -45,6 +49,9 @@ const RightForm = () => {
     useEffect(() => {
         setNaturesTree(createDataTree(natures));
     }, [natures]);
+
+    const handleOnChangeNaturesTree = (naturesId: string[]) =>
+        setActivities(new Set<string>(natures.filter((nature) => naturesId.includes(nature.id)).map(({nature_activity: {label}}) => label)));
 
     const handleOnLanguageSearch = (value: string) => {
         fetchLanguages(0, 5, ['id', 'value'], [{key: 'value', value: `like.*${value}*`}], [{key: 'value', value: 'asc'}]);
@@ -79,6 +86,14 @@ const RightForm = () => {
                     ) : null}
                 </Col>
             </Row>
+            <Row key="Activity">
+                <Col span={12} key="ActivityLabel">
+                    Activités
+                </Col>
+                <Col span={12} key="Activity">
+                    {[...activities].reduce((acc, curr) => `${acc} ${curr} / `, '').slice(0, -3)}
+                </Col>
+            </Row>
             <Row key="Natures">
                 <Col span={24} key="NaturesSelection">
                     {naturesTree.length ? (
@@ -90,6 +105,7 @@ const RightForm = () => {
                             placeholder="Rechercher un mode d'exploitation"
                             showCheckedStrategy={SHOW_PARENT}
                             style={{width: '100%'}}
+                            onChange={handleOnChangeNaturesTree}
                         />
                     ) : null}
                 </Col>

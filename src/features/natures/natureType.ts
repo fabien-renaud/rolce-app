@@ -4,5 +4,5 @@ export type Nature = {
     id: string;
     label: string;
     parentId: string;
-    activity: Activity;
+    nature_activity: Activity;
 };
