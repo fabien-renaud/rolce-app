@@ -4,7 +4,9 @@ const fetchAll = async (offset?: number, limit?: number, fields?: string[], filt
     const urlFilters: string | undefined = filters?.reduce((acc, {key, value}) => `${acc}&${key}=${value}`, '');
     const urlFields: string | undefined = fields?.join(',');
     const response: Response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}territories?fields=${urlFields ?? ''}&offset=${offset ?? ''}&limit=${limit ?? ''}${urlFilters ?? ''}`,
+        `${process.env.REACT_APP_POSTGREST_API_BASE_URL}territory?select=${urlFields ?? ''}${offset ? `&offset=${offset}` : ''}${
+            limit ? `&limit=${limit}` : ''
+        }${urlFilters ?? ''}`,
         {
             method: 'GET'
         }

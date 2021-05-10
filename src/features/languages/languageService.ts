@@ -1,16 +1,28 @@
 import {Language} from './languageType';
-import languages from './languages.json';
 
-const fetchAll = async (offset: number, limit: number, name: string): Promise<Language[]> =>
-    new Promise<Language[]>((resolve) => {
-        const data = languages
-            .filter((language: Language) => (name ? language.value.includes(name) : true))
-            .map((language: Language) => ({
-                id: language.id,
-                value: language.value
-            }));
-        resolve(data.slice(offset, limit));
-    });
+const fetchAll = async (
+    offset?: number,
+    limit?: number,
+    fields?: string[],
+    filters?: {key: string; value: string | null}[],
+    orders?: {key: string; value: string | null}[]
+): Promise<Language[]> => {
+    const urlFilters: string | undefined = filters?.reduce((acc, {key, value}) => `${acc}&${key}=${value}`, '');
+    const urlOrders: string | undefined = orders?.reduce((acc, {key, value}) => `${acc}${key}.${value},`, '&order=').slice(0, -1);
+    const urlFields: string | undefined = fields?.join(',');
+    const response: Response = await fetch(
+        `${process.env.REACT_APP_POSTGREST_API_BASE_URL}language?select=${urlFields ?? ''}${offset ? `&offset=${offset}` : ''}${
+            limit ? `&limit=${limit}` : ''
+        }${urlFilters ?? ''}${urlOrders ?? ''}`,
+        {
+            method: 'GET'
+        }
+    );
+    if (response.ok) {
+        return (await response.json()) as Language[];
+    }
+    return Promise.reject(new Error((await response.json()).message));
+};
 
 export default {
     fetchAll

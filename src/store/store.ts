@@ -3,13 +3,15 @@ import contractMetadataReducer from 'features/contractMetadata/contractMetadataS
 import contractsReducer from 'features/contracts/contractsSlice';
 import languagesReducer from 'features/languages/languagesSlice';
 import territoriesReducer from 'features/territories/territoriesSlice';
+import naturesReducer from 'features/natures/naturesSlice';
 
 const store = configureStore({
     reducer: {
         contractMetadata: contractMetadataReducer,
         contracts: contractsReducer,
         languages: languagesReducer,
-        territories: territoriesReducer
+        territories: territoriesReducer,
+        natures: naturesReducer
     }
 });
 

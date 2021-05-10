@@ -2,13 +2,7 @@ import {createAsyncThunk, createEntityAdapter, createSlice} from '@reduxjs/toolk
 import {State} from 'store';
 import {Territory} from './territoryType';
 import territoryService from './territoryService';
-
-type FetchAllParameters = {
-    offset?: number;
-    limit?: number;
-    fields?: string[];
-    filters?: {key: string; value: string | null}[];
-};
+import {FetchAllParameters} from '../../utils';
 
 export const fetchAllTerritories = createAsyncThunk('territory/fetchAll', async ({offset, limit, fields, filters}: FetchAllParameters) =>
     territoryService.fetchAll(offset, limit, fields, filters)
