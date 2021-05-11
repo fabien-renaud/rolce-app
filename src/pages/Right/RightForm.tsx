@@ -1,11 +1,11 @@
-import {Button, Col, DatePicker, Divider, Empty, Form, Input, InputNumber, Radio, Row, Select, Spin, TreeSelect} from 'antd';
-import React, {JSXElementConstructor, ReactElement, useEffect, useState} from 'react';
+import {Col, DatePicker, Empty, Form, FormInstance, Input, InputNumber, Radio, Row, Select, Spin, TreeSelect} from 'antd';
+import React, {useEffect, useState} from 'react';
 import {Territory, useTerritories} from '../../features/territories';
 import {Nature, useNatures} from '../../features/natures';
 import {Activity} from '../../features/activities';
 import {currencyFormatter, currencyParser} from '../../utils';
-import {Language, useLanguages} from '../../features/languages';
-import {Artwork, useArtworks} from '../../features/artworks';
+import {useLanguages} from '../../features/languages';
+import {useArtworks} from '../../features/artworks';
 import {ContractMetadata} from '../../features/contractMetadata';
 
 const {SHOW_PARENT} = TreeSelect;
@@ -33,25 +33,22 @@ const createDataTree = (dataset: Territory[] | Nature[]) => {
 
 type RightFormProps = {
     contract: ContractMetadata;
+    form: FormInstance;
 };
 
-const RightForm = ({contract}: RightFormProps) => {
-    const [form] = Form.useForm();
+const RightForm = ({contract, form}: RightFormProps) => {
     const {territories, fetchTerritories} = useTerritories();
     const [territoriesTree, setTerritoriesTree] = useState<TerritoryTree[]>([]);
     const {natures, fetchNatures} = useNatures();
     const [naturesTree, setNaturesTree] = useState<NatureTree[]>([]);
-    const [activities, setActivities] = useState<Activity[]>([]);
-    const {contentRange: contentRangeLanguages, fetching: fetchingLanguages, languages, fetchLanguages} = useLanguages();
-    const [fetchingMoreLanguages, setFetchingMoreLanguages] = useState(false);
-    const {contentRange: contentRangeArtworks, fetching: fetchingArtworks, artworks, fetchArtworks} = useArtworks();
-    const [fetchingMoreArtworks, setFetchingMoreArtworks] = useState(false);
+    const {fetching: fetchingLanguages, languages, fetchLanguages} = useLanguages();
+    const {fetching: fetchingArtworks, artworks, fetchArtworks} = useArtworks();
 
     useEffect(() => {
-        fetchArtworks(0, 5, ['id', 'value:title'], [], [{key: 'title', value: 'asc'}]);
+        fetchArtworks(0, 10, ['id', 'value:title'], [], [{key: 'title', value: 'asc'}]);
         fetchTerritories(undefined, undefined, ['id', 'code', 'label', 'parentId']);
         fetchNatures(undefined, undefined, ['id', 'code', 'label', 'parentId', 'nature_activity(id, label)']);
-        fetchLanguages(0, 5, ['id', 'value'], [], [{key: 'value', value: 'asc'}]);
+        fetchLanguages(0, 10, ['id', 'value'], [], [{key: 'value', value: 'asc'}]);
     }, []);
 
     useEffect(() => {
@@ -62,63 +59,8 @@ const RightForm = ({contract}: RightFormProps) => {
         setNaturesTree(createDataTree(natures));
     }, [natures]);
 
-    useEffect(() => {
-        if (!fetchingArtworks) setFetchingMoreArtworks(false);
-    }, [fetchingArtworks]);
-
-    useEffect(() => {
-        if (!fetchingLanguages) setFetchingMoreLanguages(false);
-    }, [fetchingLanguages]);
-
-    const displayDropdownRender = (
-        range: string,
-        values: Language[] | Artwork[],
-        fetch: any,
-        fetching: boolean,
-        setFetching: React.Dispatch<React.SetStateAction<boolean>>
-    ) => (menu: ReactElement<any, string | JSXElementConstructor<any>>) => {
-        if (range) {
-            const [current, total] = range.split('/');
-            const totalNumber = parseInt(total, 10);
-            const [, max] = current.split('-');
-            const maxNumber = parseInt(max, 10);
-            const offset = maxNumber + 1;
-            if (totalNumber > offset && totalNumber > values.length) {
-                return (
-                    <div>
-                        {menu}
-                        <Divider style={{margin: '4px 0'}} />
-                        <div style={{display: 'flex', flexWrap: 'nowrap', padding: 8, justifyContent: 'center'}}>
-                            <Button
-                                type="primary"
-                                loading={fetching}
-                                onClick={() => {
-                                    setFetching(true);
-                                    fetch(
-                                        offset,
-                                        5,
-                                        ['id', 'value'],
-                                        [],
-                                        [
-                                            {
-                                                key: 'value',
-                                                value: 'asc'
-                                            }
-                                        ]
-                                    );
-                                }}>
-                                Charger plus
-                            </Button>
-                        </div>
-                    </div>
-                );
-            }
-        }
-        return menu;
-    };
-
     const handleOnChangeNaturesTree = (naturesId: string[]) => {
-        const uniqueActivities: Activity[] = [];
+        const activities: Activity[] = [];
         natures
             .filter((nature) => naturesId.includes(nature.id))
             .map(({nature_activity}) => ({
@@ -126,18 +68,18 @@ const RightForm = ({contract}: RightFormProps) => {
                 value: nature_activity.label
             }))
             .forEach((activity) => {
-                if (!uniqueActivities.find((a) => a.id === activity.id)) uniqueActivities.push(activity);
+                if (!activities.find((a) => a.id === activity.id)) activities.push(activity);
             });
-        setActivities(uniqueActivities);
+        form.setFieldsValue({
+            activities
+        });
     };
 
-    const handleOnArtworkSearch = (value: string) => {
-        fetchArtworks(0, 5, ['id', 'value'], [{key: 'title', value: `like.*${value}*`}], [{key: 'title', value: 'asc'}]);
-    };
+    const handleOnArtworkSearch = (value: string) =>
+        fetchArtworks(0, 10, ['id', 'value:title'], [{key: 'title', value: `like.*${value}*`}], [{key: 'title', value: 'asc'}]);
 
-    const handleOnLanguageSearch = (value: string) => {
-        fetchLanguages(0, 5, ['id', 'value'], [{key: 'value', value: `like.*${value}*`}], [{key: 'value', value: 'asc'}]);
-    };
+    const handleOnLanguageSearch = (value: string) =>
+        fetchLanguages(0, 10, ['id', 'value'], [{key: 'value', value: `like.*${value}*`}], [{key: 'value', value: 'asc'}]);
 
     return (
         <Form
@@ -149,55 +91,57 @@ const RightForm = ({contract}: RightFormProps) => {
             wrapperCol={{
                 xs: {span: 24},
                 sm: {span: 16}
+            }}
+            initialValues={{
+                hasExclusivity: 1,
+                type: 'Acquisition',
+                contract: contract.name
             }}>
             <Row key="Artworks">
                 <Col span={12} key="ArtworksAndContract">
-                    <Form.Item label="Oeuvres">
+                    <Form.Item label="Oeuvres" name="artworks">
                         <Select
                             labelInValue
                             mode="multiple"
                             allowClear
-                            autoClearSearchValue={false}
                             onSearch={handleOnArtworkSearch}
                             placeholder="Rechercher une oeuvre"
                             style={{width: '100%'}}
                             notFoundContent={
                                 fetchingArtworks ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />
                             }
-                            options={artworks.sort((aa, ab) => aa.value.localeCompare(ab.value))}
-                            dropdownRender={displayDropdownRender(contentRangeArtworks, artworks, fetchArtworks, fetchingMoreArtworks, setFetchingMoreArtworks)}
+                            options={artworks.sort((aa, ab) => aa.value.localeCompare(ab.value)).map((artwork) => ({label: artwork.value, value: artwork.id}))}
                             maxTagCount="responsive"
                         />
                     </Form.Item>
                 </Col>
                 <Col span={12} key="Contract">
-                    <Form.Item label="Contract">
-                        <Input key={contract.reference} value={contract.name} disabled />
+                    <Form.Item label="Contract" name="contract">
+                        <Input key={contract.reference} disabled />
                     </Form.Item>
                 </Col>
             </Row>
             <Row key="DateRange">
                 <Col span={12} key="DateStart">
-                    <Form.Item label="Date de début">
+                    <Form.Item label="Date de début" name="dateStart">
                         <DatePicker style={{width: '100%'}} />
                     </Form.Item>
                 </Col>
                 <Col span={12} key="DateEnd">
-                    <Form.Item label="Date de fin">
+                    <Form.Item label="Date de fin" name="dateEnd">
                         <DatePicker style={{width: '100%'}} />
                     </Form.Item>
                 </Col>
             </Row>
             <Row key="Details">
                 <Col span={12} key="Price">
-                    <Form.Item label="Prix">
+                    <Form.Item label="Prix" name="price">
                         <InputNumber formatter={currencyFormatter} parser={currencyParser} />
                     </Form.Item>
                 </Col>
                 <Col span={12} key="HasExclusivity">
-                    <Form.Item label="Exclusivité">
+                    <Form.Item label="Exclusivité" name="hasExclusivity">
                         <Radio.Group
-                            defaultValue={1}
                             options={[
                                 {label: 'Exclusif', value: 1},
                                 {label: 'Non exclusif', value: 0}
@@ -208,9 +152,8 @@ const RightForm = ({contract}: RightFormProps) => {
             </Row>
             <Row key="TypeAndLanguages">
                 <Col span={12} key="RightType">
-                    <Form.Item label="Type">
+                    <Form.Item label="Type" name="type">
                         <Select
-                            defaultValue="Acquisition"
                             options={[
                                 {
                                     value: 'Acquisition'
@@ -230,26 +173,19 @@ const RightForm = ({contract}: RightFormProps) => {
                     </Form.Item>
                 </Col>
                 <Col span={12} key="LanguagesSelection">
-                    <Form.Item label="Langues">
+                    <Form.Item label="Langues" name="languages">
                         <Select
-                            labelInValue
                             mode="multiple"
                             allowClear
-                            autoClearSearchValue={false}
                             onSearch={handleOnLanguageSearch}
                             placeholder="Rechercher une langue"
                             style={{width: '100%'}}
                             notFoundContent={
                                 fetchingLanguages ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />
                             }
-                            options={languages.sort((la, lb) => la.value.localeCompare(lb.value))}
-                            dropdownRender={displayDropdownRender(
-                                contentRangeLanguages,
-                                languages,
-                                fetchLanguages,
-                                fetchingMoreLanguages,
-                                setFetchingMoreLanguages
-                            )}
+                            options={languages
+                                .sort((la, lb) => la.value.localeCompare(lb.value))
+                                .map((language) => ({label: language.value, value: language.id}))}
                             maxTagCount="responsive"
                         />
                     </Form.Item>
@@ -257,7 +193,7 @@ const RightForm = ({contract}: RightFormProps) => {
             </Row>
             <Row key="Territories">
                 <Col span={12} key="TerritoriesSelection">
-                    <Form.Item label="Territoires">
+                    <Form.Item label="Territoires" name="territories">
                         <TreeSelect
                             treeData={territoriesTree}
                             treeCheckable
@@ -274,7 +210,7 @@ const RightForm = ({contract}: RightFormProps) => {
             </Row>
             <Row key="NaturesAndActivity">
                 <Col span={12} key="NaturesSelection">
-                    <Form.Item label="Modes d'exploitation">
+                    <Form.Item label="Modes d'exploitation" name="natures">
                         <TreeSelect
                             treeData={naturesTree}
                             treeCheckable
@@ -290,15 +226,13 @@ const RightForm = ({contract}: RightFormProps) => {
                     </Form.Item>
                 </Col>
                 <Col span={12} key="ActivityLabel">
-                    <Form.Item label="Activités">
+                    <Form.Item label="Activités" name="activities">
                         <Select
                             labelInValue
                             mode="multiple"
                             disabled
                             placeholder="Activités"
                             style={{width: '100%'}}
-                            options={activities}
-                            value={activities}
                             maxTagCount="responsive"
                             notFoundContent={<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />}
                         />
