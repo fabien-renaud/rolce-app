@@ -4,9 +4,11 @@ import contractsReducer from 'features/contracts/contractsSlice';
 import languagesReducer from 'features/languages/languagesSlice';
 import territoriesReducer from 'features/territories/territoriesSlice';
 import naturesReducer from 'features/natures/naturesSlice';
+import artworksReducer from 'features/artworks/artworksSlice';
 
 const store = configureStore({
     reducer: {
+        artworks: artworksReducer,
         contractMetadata: contractMetadataReducer,
         contracts: contractsReducer,
         languages: languagesReducer,

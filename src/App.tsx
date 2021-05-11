@@ -10,7 +10,7 @@ const App = () => {
     return (
         <ConfigProvider locale={frFR}>
             <FormDrawer cancelText="Annuler" submitText="Valider" title="Création de droits" visible onCancel={() => {}} onSubmit={() => {}}>
-                <RightForm />
+                <RightForm contract={{reference: 'id', name: 'contract'}} />
             </FormDrawer>
             <Router>
                 <Switch>
