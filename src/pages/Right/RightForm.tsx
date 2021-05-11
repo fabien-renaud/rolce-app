@@ -3,33 +3,15 @@ import React, {useEffect, useState} from 'react';
 import {Territory, useTerritories} from '../../features/territories';
 import {Nature, useNatures} from '../../features/natures';
 import {Activity} from '../../features/activities';
-import {currencyFormatter, currencyParser} from '../../utils';
+import {createDataTree, currencyFormatter, currencyParser, DataTree} from '../../utils';
 import {useLanguages} from '../../features/languages';
 import {useArtworks} from '../../features/artworks';
 import {ContractMetadata} from '../../features/contractMetadata';
 
 const {SHOW_PARENT} = TreeSelect;
 
-type DataTree = {
-    children: DataTree[];
-    value: string;
-};
-
 type TerritoryTree = DataTree & Partial<Territory>;
 type NatureTree = DataTree & Partial<Nature>;
-
-const createDataTree = (dataset: Territory[] | Nature[]) => {
-    const hashTable = Object.create(null);
-    dataset.forEach((aData) => {
-        hashTable[aData.id] = {...aData, children: [], value: aData.id};
-    });
-    const dataTree: DataTree[] = [];
-    dataset.forEach((aData) => {
-        if (aData.parentId) hashTable[aData.parentId].children.push(hashTable[aData.id]);
-        else dataTree.push(hashTable[aData.id]);
-    });
-    return dataTree;
-};
 
 type RightFormProps = {
     contract: ContractMetadata;
@@ -52,11 +34,11 @@ const RightForm = ({contract, form}: RightFormProps) => {
     }, []);
 
     useEffect(() => {
-        setTerritoriesTree(createDataTree(territories));
+        setTerritoriesTree(createDataTree<Territory>(territories));
     }, [territories]);
 
     useEffect(() => {
-        setNaturesTree(createDataTree(natures));
+        setNaturesTree(createDataTree<Nature>(natures));
     }, [natures]);
 
     const handleOnChangeNaturesTree = (naturesId: string[]) => {
