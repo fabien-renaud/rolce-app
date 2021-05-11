@@ -1,11 +1,10 @@
 import {createAsyncThunk, createEntityAdapter, createSlice} from '@reduxjs/toolkit';
 import {State} from 'store';
-import artworkService from './artworkService';
-import {FetchAllParameters} from '../../utils';
+import {fetchAll, FetchAllParameters} from '../../utils';
 import {Artwork} from './artworkType';
 
 export const fetchAllArtworks = createAsyncThunk('artwork/fetchAll', async ({offset, limit, fields, filters, orders}: FetchAllParameters) =>
-    artworkService.fetchAll(offset, limit, fields, filters, orders)
+    fetchAll<Artwork>('artwork', offset, limit, fields, filters, orders)
 );
 
 const artworksAdapter = createEntityAdapter<Artwork>({});
@@ -23,7 +22,7 @@ export const artworksSlice = createSlice({
         });
         builder.addCase(fetchAllArtworks.fulfilled, (state, action) => {
             if (action.payload) {
-                artworksAdapter.upsertMany(state, action.payload.artworks);
+                artworksAdapter.upsertMany(state, action.payload.datas);
                 state.contentRange = action.payload.contentRange;
             }
             state.loading = false;

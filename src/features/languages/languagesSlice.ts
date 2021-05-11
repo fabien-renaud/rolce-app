@@ -1,11 +1,10 @@
 import {createAsyncThunk, createEntityAdapter, createSlice} from '@reduxjs/toolkit';
 import {State} from 'store';
 import {Language} from './languageType';
-import languageService from './languageService';
-import {FetchAllParameters} from '../../utils';
+import {fetchAll, FetchAllParameters} from '../../utils';
 
 export const fetchAllLanguages = createAsyncThunk('language/fetchAll', async ({offset, limit, fields, filters, orders}: FetchAllParameters) =>
-    languageService.fetchAll(offset, limit, fields, filters, orders)
+    fetchAll<Language>('language', offset, limit, fields, filters, orders)
 );
 
 const languagesAdapter = createEntityAdapter<Language>({});
@@ -23,7 +22,7 @@ export const languagesSlice = createSlice({
         });
         builder.addCase(fetchAllLanguages.fulfilled, (state, action) => {
             if (action.payload) {
-                languagesAdapter.upsertMany(state, action.payload.languages);
+                languagesAdapter.upsertMany(state, action.payload.datas);
                 state.contentRange = action.payload.contentRange;
             }
             state.loading = false;

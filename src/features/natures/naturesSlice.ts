@@ -1,11 +1,10 @@
 import {createAsyncThunk, createEntityAdapter, createSlice} from '@reduxjs/toolkit';
 import {State} from 'store';
 import {Nature} from './natureType';
-import natureService from './natureService';
-import {FetchAllParameters} from '../../utils';
+import {fetchAll, FetchAllParameters} from '../../utils';
 
 export const fetchAllNatures = createAsyncThunk('nature/fetchAll', async ({offset, limit, fields, filters}: FetchAllParameters) =>
-    natureService.fetchAll(offset, limit, fields, filters)
+    fetchAll<Nature>('nature', offset, limit, fields, filters)
 );
 
 const naturesAdapter = createEntityAdapter<Nature>({});
@@ -21,7 +20,7 @@ export const naturesSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(fetchAllNatures.fulfilled, (state, action) => {
-            if (action.payload) naturesAdapter.upsertMany(state, action.payload);
+            if (action.payload) naturesAdapter.upsertMany(state, action.payload.datas);
             state.loading = false;
         });
     }
