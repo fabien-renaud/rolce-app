@@ -19,6 +19,7 @@ const FormDrawer = ({children, visible, title, cancelText, onCancel, submitText,
         closable
         key="FormDrawer"
         height={500}
+        onClose={onCancel}
         footer={
             <div
                 style={{
