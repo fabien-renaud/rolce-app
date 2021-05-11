@@ -64,10 +64,10 @@ const RightForm = ({contract, form}: RightFormProps) => {
     };
 
     const handleOnArtworkSearch = (value: string) =>
-        fetchArtworks(0, 10, ['id', 'value:title'], [{key: 'title', value: `like.*${value}*`}], [{key: 'title', value: 'asc'}]);
+        fetchArtworks(0, 10, ['id', 'value:title'], [{key: 'title', value: `ilike.*${value}*`}], [{key: 'title', value: 'asc'}]);
 
     const handleOnLanguageSearch = (value: string) =>
-        fetchLanguages(0, 10, ['id', 'value'], [{key: 'value', value: `like.*${value}*`}], [{key: 'value', value: 'asc'}]);
+        fetchLanguages(0, 10, ['id', 'value'], [{key: 'value', value: `ilike.*${value}*`}], [{key: 'value', value: 'asc'}]);
 
     const onFinish = () => {
         const price = form.getFieldValue('price');
@@ -121,6 +121,7 @@ const RightForm = ({contract, form}: RightFormProps) => {
                             notFoundContent={
                                 fetchingArtworks ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />
                             }
+                            optionFilterProp="label"
                             options={artworks.sort((aa, ab) => aa.value.localeCompare(ab.value)).map((artwork) => ({label: artwork.value, value: artwork.id}))}
                             maxTagCount="responsive"
                         />
@@ -197,6 +198,7 @@ const RightForm = ({contract, form}: RightFormProps) => {
                             notFoundContent={
                                 fetchingLanguages ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />
                             }
+                            optionFilterProp="label"
                             options={languages
                                 .sort((la, lb) => la.value.localeCompare(lb.value))
                                 .map((language) => ({label: language.value, value: language.id}))}
@@ -212,7 +214,7 @@ const RightForm = ({contract, form}: RightFormProps) => {
                             treeData={territoriesTree}
                             treeCheckable
                             treeNodeLabelProp="label"
-                            treeNodeFilterProp="id"
+                            treeNodeFilterProp="label"
                             placeholder="Rechercher un territoire"
                             showCheckedStrategy={SHOW_PARENT}
                             style={{width: '100%'}}
@@ -232,7 +234,7 @@ const RightForm = ({contract, form}: RightFormProps) => {
                             treeData={naturesTree}
                             treeCheckable
                             treeNodeLabelProp="label"
-                            treeNodeFilterProp="id"
+                            treeNodeFilterProp="label"
                             placeholder="Rechercher un mode d'exploitation"
                             showCheckedStrategy={SHOW_PARENT}
                             style={{width: '100%'}}

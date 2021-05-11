@@ -21,10 +21,8 @@ export const artworksSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(fetchAllArtworks.fulfilled, (state, action) => {
-            if (action.payload) {
-                artworksAdapter.upsertMany(state, action.payload.datas);
-                state.contentRange = action.payload.contentRange;
-            }
+            artworksAdapter.setAll(state, action.payload.datas);
+            state.contentRange = action.payload.contentRange;
             state.loading = false;
         });
     }

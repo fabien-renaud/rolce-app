@@ -21,10 +21,8 @@ export const languagesSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(fetchAllLanguages.fulfilled, (state, action) => {
-            if (action.payload) {
-                languagesAdapter.upsertMany(state, action.payload.datas);
-                state.contentRange = action.payload.contentRange;
-            }
+            languagesAdapter.setAll(state, action.payload.datas);
+            state.contentRange = action.payload.contentRange;
             state.loading = false;
         });
     }
