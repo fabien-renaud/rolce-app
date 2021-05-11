@@ -1,4 +1,4 @@
-import {Button, Col, DatePicker, Divider, Form, InputNumber, Radio, Row, Select, Spin, TreeSelect} from 'antd';
+import {Button, Col, DatePicker, Divider, Empty, Form, InputNumber, Radio, Row, Select, Spin, TreeSelect} from 'antd';
 import {JSXElementConstructor, ReactElement, useEffect, useState} from 'react';
 import {Territory, useTerritories} from '../../features/territories';
 import {Nature, useNatures} from '../../features/natures';
@@ -117,7 +117,16 @@ const RightForm = () => {
     };
 
     return (
-        <Form form={form}>
+        <Form
+            form={form}
+            labelCol={{
+                xs: {span: 24},
+                sm: {span: 8}
+            }}
+            wrapperCol={{
+                xs: {span: 24},
+                sm: {span: 16}
+            }}>
             <Row key="DateRange">
                 <Col span={12} key="DateStart">
                     <Form.Item label="Date de début">
@@ -131,93 +140,118 @@ const RightForm = () => {
                 </Col>
             </Row>
             <Row key="Details">
-                <Col span={12} key="ContractType">
-                    <Select
-                        defaultValue="Acquisition"
-                        options={[
-                            {
-                                value: 'Acquisition'
-                            },
-                            {
-                                value: 'Vente'
-                            },
-                            {
-                                value: 'Holdback'
-                            },
-                            {
-                                value: 'Suspension'
-                            }
-                        ]}
-                        style={{width: '100%'}}
-                    />
+                <Col span={12} key="Price">
+                    <Form.Item label="Prix">
+                        <InputNumber formatter={currencyFormatter} parser={currencyParser} />
+                    </Form.Item>
                 </Col>
                 <Col span={12} key="HasExclusivity">
-                    <Radio.Group
-                        defaultValue={1}
-                        options={[
-                            {label: 'Exclusif', value: 1},
-                            {label: 'Non exclusif', value: 0}
-                        ]}
-                    />
+                    <Form.Item label="Exclusivité">
+                        <Radio.Group
+                            defaultValue={1}
+                            options={[
+                                {label: 'Exclusif', value: 1},
+                                {label: 'Non exclusif', value: 0}
+                            ]}
+                        />
+                    </Form.Item>
                 </Col>
             </Row>
-            <Row key="Price">
-                <Col span={12} key="Price">
-                    <InputNumber formatter={currencyFormatter} parser={currencyParser} />
+            <Row key="TypeAndLanguages">
+                <Col span={12} key="RightType">
+                    <Form.Item label="Type">
+                        <Select
+                            defaultValue="Acquisition"
+                            options={[
+                                {
+                                    value: 'Acquisition'
+                                },
+                                {
+                                    value: 'Vente'
+                                },
+                                {
+                                    value: 'Holdback'
+                                },
+                                {
+                                    value: 'Suspension'
+                                }
+                            ]}
+                            style={{width: '100%'}}
+                        />
+                    </Form.Item>
+                </Col>
+                <Col span={12} key="LanguagesSelection">
+                    <Form.Item label="Langues">
+                        {naturesTree.length ? (
+                            <Select
+                                labelInValue
+                                mode="multiple"
+                                allowClear
+                                autoClearSearchValue={false}
+                                onSearch={handleOnLanguageSearch}
+                                placeholder="Rechercher une langue"
+                                style={{width: '100%'}}
+                                notFoundContent={fetching ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />}
+                                options={languages.sort((la, lb) => la.value.localeCompare(lb.value))}
+                                dropdownRender={displayLanguageDropdownRender}
+                                maxTagCount="responsive"
+                            />
+                        ) : null}
+                    </Form.Item>
                 </Col>
             </Row>
             <Row key="Territories">
-                <Col span={24} key="TerritoriesSelection">
-                    {territoriesTree.length ? (
-                        <TreeSelect
-                            treeData={territoriesTree}
-                            treeCheckable
-                            treeNodeLabelProp="label"
-                            treeNodeFilterProp="id"
-                            placeholder="Rechercher un territoire"
-                            showCheckedStrategy={SHOW_PARENT}
-                            style={{width: '100%'}}
-                        />
-                    ) : null}
+                <Col span={12} key="TerritoriesSelection">
+                    <Form.Item label="Territoires">
+                        {territoriesTree.length ? (
+                            <TreeSelect
+                                treeData={territoriesTree}
+                                treeCheckable
+                                treeNodeLabelProp="label"
+                                treeNodeFilterProp="id"
+                                placeholder="Rechercher un territoire"
+                                showCheckedStrategy={SHOW_PARENT}
+                                style={{width: '100%'}}
+                                maxTagCount="responsive"
+                                notFoundContent={<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />}
+                            />
+                        ) : null}
+                    </Form.Item>
                 </Col>
             </Row>
-            <Row key="Activity">
-                <Col span={24} key="ActivityLabel">
-                    <Select labelInValue mode="multiple" disabled placeholder="Activités" style={{width: '100%'}} options={activities} value={activities} />
+            <Row key="NaturesAndActivity">
+                <Col span={12} key="NaturesSelection">
+                    <Form.Item label="Modes d'exploitation">
+                        {naturesTree.length ? (
+                            <TreeSelect
+                                treeData={naturesTree}
+                                treeCheckable
+                                treeNodeLabelProp="label"
+                                treeNodeFilterProp="id"
+                                placeholder="Rechercher un mode d'exploitation"
+                                showCheckedStrategy={SHOW_PARENT}
+                                style={{width: '100%'}}
+                                onChange={handleOnChangeNaturesTree}
+                                maxTagCount="responsive"
+                                notFoundContent={<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />}
+                            />
+                        ) : null}
+                    </Form.Item>
                 </Col>
-            </Row>
-            <Row key="Natures">
-                <Col span={24} key="NaturesSelection">
-                    {naturesTree.length ? (
-                        <TreeSelect
-                            treeData={naturesTree}
-                            treeCheckable
-                            treeNodeLabelProp="label"
-                            treeNodeFilterProp="id"
-                            placeholder="Rechercher un mode d'exploitation"
-                            showCheckedStrategy={SHOW_PARENT}
-                            style={{width: '100%'}}
-                            onChange={handleOnChangeNaturesTree}
-                        />
-                    ) : null}
-                </Col>
-            </Row>
-            <Row key="Languages">
-                <Col span={24} key="LanguagesSelection">
-                    {naturesTree.length ? (
+                <Col span={12} key="ActivityLabel">
+                    <Form.Item label="Activités">
                         <Select
                             labelInValue
                             mode="multiple"
-                            allowClear
-                            autoClearSearchValue={false}
-                            onSearch={handleOnLanguageSearch}
-                            placeholder="Rechercher une langue"
+                            disabled
+                            placeholder="Activités"
                             style={{width: '100%'}}
-                            notFoundContent={fetching ? <Spin size="small" /> : null}
-                            options={languages}
-                            dropdownRender={displayLanguageDropdownRender}
+                            options={activities}
+                            value={activities}
+                            maxTagCount="responsive"
+                            notFoundContent={<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />}
                         />
-                    ) : null}
+                    </Form.Item>
                 </Col>
             </Row>
         </Form>
