@@ -10,6 +10,12 @@ import {ContractMetadata} from '../../features/contractMetadata';
 
 const {SHOW_PARENT} = TreeSelect;
 
+type BillingTerm = {
+    activityId: string;
+    artworkId: string;
+    price: number;
+};
+
 type TerritoryTree = DataTree & Partial<Territory>;
 type NatureTree = DataTree & Partial<Nature>;
 
@@ -63,6 +69,28 @@ const RightForm = ({contract, form}: RightFormProps) => {
     const handleOnLanguageSearch = (value: string) =>
         fetchLanguages(0, 10, ['id', 'value'], [{key: 'value', value: `like.*${value}*`}], [{key: 'value', value: 'asc'}]);
 
+    const onFinish = () => {
+        const price = form.getFieldValue('price');
+        const billingTerms: BillingTerm[] = [];
+        form.getFieldValue('activities').forEach((activity: string) => {
+            form.getFieldValue('artworks').forEach((artwork: string) => {
+                billingTerms.push({activityId: activity, artworkId: artwork, price});
+            });
+        });
+        const rightDto = {
+            contratId: form.getFieldValue('contract'),
+            type: form.getFieldValue('contract'),
+            billingTerms,
+            beginAt: form.getFieldValue('dateStart'),
+            endAt: form.getFieldValue('dateEnd'),
+            hasExclusivity: form.getFieldValue('hasExclusivity'),
+            languagesId: new Set(form.getFieldValue('languages')),
+            naturesId: new Set(form.getFieldValue('languages')),
+            territoriesId: new Set(form.getFieldValue('languages'))
+        };
+        console.log(rightDto);
+    };
+
     return (
         <Form
             form={form}
@@ -78,10 +106,11 @@ const RightForm = ({contract, form}: RightFormProps) => {
                 hasExclusivity: 1,
                 type: 'Acquisition',
                 contract: contract.name
-            }}>
+            }}
+            onFinish={onFinish}>
             <Row key="Artworks">
                 <Col span={12} key="ArtworksAndContract">
-                    <Form.Item label="Oeuvres" name="artworks">
+                    <Form.Item label="Oeuvres" name="artworks" rules={[{required: true, message: 'Merci de sélectionner au moins une oeuvre'}]}>
                         <Select
                             labelInValue
                             mode="multiple"
@@ -98,31 +127,34 @@ const RightForm = ({contract, form}: RightFormProps) => {
                     </Form.Item>
                 </Col>
                 <Col span={12} key="Contract">
-                    <Form.Item label="Contract" name="contract">
+                    <Form.Item label="Contract" name="contract" rules={[{required: true, message: 'Un contrat doit être spécifié'}]}>
                         <Input key={contract.reference} disabled />
                     </Form.Item>
                 </Col>
             </Row>
             <Row key="DateRange">
                 <Col span={12} key="DateStart">
-                    <Form.Item label="Date de début" name="dateStart">
+                    <Form.Item label="Date de début" name="dateStart" rules={[{required: true, message: 'Une date de début doit être renseignée'}]}>
                         <DatePicker style={{width: '100%'}} />
                     </Form.Item>
                 </Col>
                 <Col span={12} key="DateEnd">
-                    <Form.Item label="Date de fin" name="dateEnd">
+                    <Form.Item label="Date de fin" name="dateEnd" rules={[{required: true, message: 'Une date de fin doit être renseignée'}]}>
                         <DatePicker style={{width: '100%'}} />
                     </Form.Item>
                 </Col>
             </Row>
             <Row key="Details">
                 <Col span={12} key="Price">
-                    <Form.Item label="Prix" name="price">
+                    <Form.Item label="Prix" name="price" rules={[{required: true, message: 'Un prix doit être spécifié'}]}>
                         <InputNumber formatter={currencyFormatter} parser={currencyParser} />
                     </Form.Item>
                 </Col>
                 <Col span={12} key="HasExclusivity">
-                    <Form.Item label="Exclusivité" name="hasExclusivity">
+                    <Form.Item
+                        label="Exclusivité"
+                        name="hasExclusivity"
+                        rules={[{required: true, message: 'Merci de sélectionner si le droit est exclusif ou non'}]}>
                         <Radio.Group
                             options={[
                                 {label: 'Exclusif', value: 1},
@@ -134,7 +166,7 @@ const RightForm = ({contract, form}: RightFormProps) => {
             </Row>
             <Row key="TypeAndLanguages">
                 <Col span={12} key="RightType">
-                    <Form.Item label="Type" name="type">
+                    <Form.Item label="Type" name="type" rules={[{required: true, message: 'Merci de préciser le type de droit'}]}>
                         <Select
                             options={[
                                 {
@@ -155,7 +187,7 @@ const RightForm = ({contract, form}: RightFormProps) => {
                     </Form.Item>
                 </Col>
                 <Col span={12} key="LanguagesSelection">
-                    <Form.Item label="Langues" name="languages">
+                    <Form.Item label="Langues" name="languages" rules={[{required: true, message: 'Merci de sélectionner au moins une langue'}]}>
                         <Select
                             mode="multiple"
                             allowClear
@@ -175,7 +207,7 @@ const RightForm = ({contract, form}: RightFormProps) => {
             </Row>
             <Row key="Territories">
                 <Col span={12} key="TerritoriesSelection">
-                    <Form.Item label="Territoires" name="territories">
+                    <Form.Item label="Territoires" name="territories" rules={[{required: true, message: 'Merci de sélectionner au moins un territoire'}]}>
                         <TreeSelect
                             treeData={territoriesTree}
                             treeCheckable
@@ -192,7 +224,10 @@ const RightForm = ({contract, form}: RightFormProps) => {
             </Row>
             <Row key="NaturesAndActivity">
                 <Col span={12} key="NaturesSelection">
-                    <Form.Item label="Modes d'exploitation" name="natures">
+                    <Form.Item
+                        label="Modes d'exploitation"
+                        name="natures"
+                        rules={[{required: true, message: "Merci de sélectionner au moins un mode d'exploitation"}]}>
                         <TreeSelect
                             treeData={naturesTree}
                             treeCheckable
@@ -208,7 +243,7 @@ const RightForm = ({contract, form}: RightFormProps) => {
                     </Form.Item>
                 </Col>
                 <Col span={12} key="ActivityLabel">
-                    <Form.Item label="Activités" name="activities">
+                    <Form.Item label="Activités" name="activities" rules={[{required: true, message: 'Merci de sélectionner au moins une activité'}]}>
                         <Select
                             labelInValue
                             mode="multiple"

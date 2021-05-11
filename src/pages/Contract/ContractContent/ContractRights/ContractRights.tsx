@@ -4,12 +4,6 @@ import {PlusCircleOutlined} from '@ant-design/icons';
 import {FormDrawer} from '../../../../components/FormDrawer';
 import {RightForm} from '../../../Right';
 
-type BillingTerm = {
-    activityId: string;
-    artworkId: string;
-    price: number;
-};
-
 const ContractRights = () => {
     const columns = [
         {
@@ -101,27 +95,7 @@ const ContractRights = () => {
     const onCancel = () => setVisible(false);
     const [form] = Form.useForm();
 
-    const onSubmit = () => {
-        const price = form.getFieldValue('price');
-        const billingTerms: BillingTerm[] = [];
-        form.getFieldValue('activities').forEach((activity: string) => {
-            form.getFieldValue('artworks').forEach((artwork: string) => {
-                billingTerms.push({activityId: activity, artworkId: artwork, price});
-            });
-        });
-        const rightDto = {
-            contratId: form.getFieldValue('contract'),
-            type: form.getFieldValue('contract'),
-            billingTerms,
-            beginAt: form.getFieldValue('dateStart'),
-            endAt: form.getFieldValue('dateEnd'),
-            hasExclusivity: form.getFieldValue('hasExclusivity'),
-            languagesId: new Set(form.getFieldValue('languages')),
-            naturesId: new Set(form.getFieldValue('natures')),
-            territoriesId: new Set(form.getFieldValue('territories'))
-        };
-        console.log(rightDto);
-    };
+    const onSubmit = () => form.submit();
 
     return (
         <>
