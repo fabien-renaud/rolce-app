@@ -1,15 +1,21 @@
 import {Link} from 'react-router-dom';
-import {PageHeader, Typography} from 'antd';
-import {Contract} from 'features/contracts/contractType';
+import {Empty, PageHeader, Spin, Typography} from 'antd';
+import React, {useEffect} from 'react';
+import {EntityId} from '@reduxjs/toolkit';
 import {ContractDetail} from './ContractDetail';
 import {ContractRights} from './ContractRights';
+import {useContracts} from '../../../features/contracts';
 
 type ContractContentProps = {
-    contract: Contract;
+    contractRef: EntityId;
 };
 
-const ContractContent = (props: ContractContentProps) => {
-    const {contract} = props;
+const ContractContent = ({contractRef}: ContractContentProps) => {
+    const {loading, selectedContract: contract, fetchContract} = useContracts(contractRef);
+
+    useEffect(() => {
+        fetchContract();
+    }, [contractRef]);
 
     const breadcrumb = {
         itemRender: ({path, breadcrumbName}: any) => <Link to={path}>{breadcrumbName}</Link>,
@@ -25,16 +31,25 @@ const ContractContent = (props: ContractContentProps) => {
         ]
     };
 
-    return (
-        <>
-            <PageHeader
-                title={<Typography>{`[${contract.reference}] ${contract.name}`}</Typography>}
-                avatar={{src: 'https://avatars.githubusercontent.com/u/23161632?v=4'}}
-                breadcrumb={breadcrumb}
-            />
-            <ContractDetail contract={contract} />
-            <ContractRights />
-        </>
+    if (contract) {
+        return (
+            <>
+                <PageHeader
+                    title={<Typography>{`[${contract.reference}] ${contract.name}`}</Typography>}
+                    avatar={{src: 'https://avatars.githubusercontent.com/u/23161632?v=4'}}
+                    breadcrumb={breadcrumb}
+                />
+                <ContractDetail contract={contract} />
+                <ContractRights />
+            </>
+        );
+    }
+    return loading ? (
+        <div style={{height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Spin size="large" />
+        </div>
+    ) : (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />
     );
 };
 

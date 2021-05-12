@@ -1,9 +1,11 @@
 import {createAsyncThunk, createEntityAdapter, createSlice} from '@reduxjs/toolkit';
 import {State} from 'store';
-import contractMetadataService from './contractMetadataService';
 import {ContractMetadata} from './contractMetadataType';
+import {fetchAll, FetchAllParameters} from '../../utils';
 
-export const fetchContractMetadata = createAsyncThunk('contractMetadata/fetchAll', contractMetadataService.fetchAll);
+export const fetchContractMetadata = createAsyncThunk('contractMetadata/fetchAll', async ({offset, limit, fields, filters, orders}: FetchAllParameters) =>
+    fetchAll<ContractMetadata>('contract', offset, limit, fields, filters, orders)
+);
 
 const contractMetadataAdapter = createEntityAdapter<ContractMetadata>({
     selectId: (metadata) => metadata.reference
@@ -20,7 +22,7 @@ export const contractMetadataSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(fetchContractMetadata.fulfilled, (state, action) => {
-            contractMetadataAdapter.upsertMany(state, action.payload);
+            contractMetadataAdapter.upsertMany(state, action.payload.datas);
             state.loading = false;
         });
     }

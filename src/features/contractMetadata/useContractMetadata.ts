@@ -9,6 +9,12 @@ export const useContractMetadata = () => {
     return {
         contractMetadata,
         contractMetadataIds,
-        fetchContractMetadata: () => dispatch(fetchContractMetadata())
+        fetchContractMetadata: (
+            offset?: number,
+            limit?: number,
+            fields?: string[],
+            filters?: {key: string; value: string | null}[],
+            orders?: {key: string; value: string | null}[]
+        ) => dispatch(fetchContractMetadata({offset, limit, fields, filters, orders}))
     };
 };

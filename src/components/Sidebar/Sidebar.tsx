@@ -19,7 +19,7 @@ const Sidebar = () => {
     ];
 
     return (
-        <Menu mode="vertical" theme="light" defaultSelectedKeys={[route]}>
+        <Menu mode="inline" theme="light" defaultSelectedKeys={[route]}>
             {menuItems.map(({text, href, icon}) => (
                 <Menu.Item icon={icon} key={href}>
                     <Link to={href}>{text}</Link>

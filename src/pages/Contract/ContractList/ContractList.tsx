@@ -7,13 +7,10 @@ type ContractListProps = {
     defaultReference?: string;
 };
 
-const ContractList = (props: ContractListProps) => {
-    const {contractMetadata, defaultReference} = props;
-
+const ContractList = ({contractMetadata, defaultReference}: ContractListProps) => {
     return (
-        <Menu mode="vertical" theme="light" defaultSelectedKeys={[defaultReference ?? '']}>
-            {contractMetadata.map((metadata) => {
-                const {reference, name} = metadata;
+        <Menu mode="inline" theme="light" defaultSelectedKeys={[defaultReference ?? '']}>
+            {contractMetadata.map(({reference, name}) => {
                 return (
                     <>
                         <Menu.Item key={reference}>

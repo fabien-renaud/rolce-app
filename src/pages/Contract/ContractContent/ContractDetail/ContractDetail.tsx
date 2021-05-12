@@ -7,11 +7,18 @@ type ContractDetailProps = {
     contract: Contract;
 };
 
-const ContractDetail = (props: ContractDetailProps) => {
-    const {
-        contract: {type, status, beginAt, endAt, accountName, comment, createdAt, updatedAt}
-    } = props;
-
+const ContractDetail = ({
+    contract: {
+        type,
+        status,
+        begin_at: beginAt,
+        end_at: endAt,
+        account: {name: accountName},
+        comment,
+        created_at: createdAt,
+        updated_at: updatedAt
+    }
+}: ContractDetailProps) => {
     return (
         <Row>
             <Col span={12}>
