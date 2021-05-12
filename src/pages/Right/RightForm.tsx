@@ -6,7 +6,7 @@ import {Activity} from '../../features/activities';
 import {createDataTree, currencyFormatter, currencyParser, DataTree} from '../../utils';
 import {useLanguages} from '../../features/languages';
 import {useArtworks} from '../../features/artworks';
-import {ContractMetadata} from '../../features/contractMetadata';
+import {CONTRACT_TYPE, ContractType} from '../../features/contracts';
 
 const {SHOW_PARENT} = TreeSelect;
 
@@ -20,7 +20,7 @@ type TerritoryTree = DataTree & Partial<Territory>;
 type NatureTree = DataTree & Partial<Nature>;
 
 type RightFormProps = {
-    contract: ContractMetadata;
+    contract: {reference: string; name: string; type: ContractType};
     form: FormInstance;
 };
 
@@ -31,6 +31,8 @@ const RightForm = ({contract, form}: RightFormProps) => {
     const [naturesTree, setNaturesTree] = useState<NatureTree[]>([]);
     const {fetching: fetchingLanguages, languages, fetchLanguages} = useLanguages();
     const {fetching: fetchingArtworks, artworks, fetchArtworks} = useArtworks();
+    const contractTypeOptions =
+        contract.type === CONTRACT_TYPE.ACQUISITION ? [{value: 'Acquisition'}, {value: 'Suspension'}] : [{value: 'Vente'}, {value: 'Holdback'}];
 
     useEffect(() => {
         fetchArtworks(0, 10, ['id', 'value:title'], [], [{key: 'title', value: 'asc'}]);
@@ -104,7 +106,7 @@ const RightForm = ({contract, form}: RightFormProps) => {
             }}
             initialValues={{
                 hasExclusivity: 1,
-                type: 'Acquisition',
+                type: contract.type === CONTRACT_TYPE.ACQUISITION ? 'Acquisition' : 'Vente',
                 contract: contract.name
             }}
             onFinish={onFinish}>
@@ -168,23 +170,7 @@ const RightForm = ({contract, form}: RightFormProps) => {
             <Row key="TypeAndLanguages">
                 <Col span={12} key="RightType">
                     <Form.Item label="Type" name="type" rules={[{required: true, message: 'Merci de préciser le type de droit'}]}>
-                        <Select
-                            options={[
-                                {
-                                    value: 'Acquisition'
-                                },
-                                {
-                                    value: 'Vente'
-                                },
-                                {
-                                    value: 'Holdback'
-                                },
-                                {
-                                    value: 'Suspension'
-                                }
-                            ]}
-                            style={{width: '100%'}}
-                        />
+                        <Select options={contractTypeOptions} style={{width: '100%'}} />
                     </Form.Item>
                 </Col>
                 <Col span={12} key="LanguagesSelection">

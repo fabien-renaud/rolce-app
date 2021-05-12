@@ -40,7 +40,7 @@ const ContractContent = ({contractRef}: ContractContentProps) => {
                     breadcrumb={breadcrumb}
                 />
                 <ContractDetail contract={contract} />
-                <ContractRights />
+                <ContractRights contract={contract} />
             </>
         );
     }

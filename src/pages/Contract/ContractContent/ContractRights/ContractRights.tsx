@@ -3,8 +3,13 @@ import {useState} from 'react';
 import {PlusCircleOutlined} from '@ant-design/icons';
 import {FormDrawer} from '../../../../components/FormDrawer';
 import {RightForm} from '../../../Right';
+import {ContractType} from '../../../../features/contracts';
 
-const ContractRights = () => {
+type ContractRightProps = {
+    contract: {reference: string; name: string; type: ContractType};
+};
+
+const ContractRights = ({contract: {reference, name, type}}: ContractRightProps) => {
     const columns = [
         {
             title: 'Name',
@@ -100,7 +105,7 @@ const ContractRights = () => {
     return (
         <>
             <FormDrawer cancelText="Annuler" submitText="Valider" title="Création de droits" visible={visible} onCancel={onCancel} onSubmit={onSubmit}>
-                <RightForm contract={{reference: 'id', name: 'contract'}} form={form} />
+                <RightForm contract={{reference, name, type}} form={form} />
             </FormDrawer>
             <Space style={{display: 'flex', justifyContent: 'space-between', marginBottom: 8, marginRight: 24, marginLeft: 24}}>
                 <Typography.Text strong>Droits</Typography.Text>
