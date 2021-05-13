@@ -2,6 +2,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {State} from 'store';
 import {fetchAllNatures, selectAllNatures} from './naturesSlice';
 import {Nature} from './natureType';
+import {FetchAllParameters} from '../../utils';
 
 export const useNatures = () => {
     const dispatch = useDispatch();
@@ -9,7 +10,6 @@ export const useNatures = () => {
 
     return {
         natures,
-        fetchNatures: (offset?: number, limit?: number, fields?: string[], filters?: {key: string; value: string | null}[]) =>
-            dispatch(fetchAllNatures({offset, limit, fields, filters}))
+        fetchNatures: (fetchAllParameters: FetchAllParameters) => dispatch(fetchAllNatures(fetchAllParameters))
     };
 };

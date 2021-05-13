@@ -3,8 +3,8 @@ import {State} from 'store';
 import {Territory} from './territoryType';
 import {fetchAll, FetchAllParameters} from '../../utils';
 
-export const fetchAllTerritories = createAsyncThunk('territory/fetchAll', async ({offset, limit, fields, filters}: FetchAllParameters) =>
-    fetchAll<Territory>('territory', offset, limit, fields, filters)
+export const fetchAllTerritories = createAsyncThunk('territory/fetchAll', async (fetchAllParameters: FetchAllParameters) =>
+    fetchAll<Territory>('territory', fetchAllParameters)
 );
 
 const territoriesAdapter = createEntityAdapter<Territory>({});

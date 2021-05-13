@@ -3,8 +3,8 @@ import {State} from 'store';
 import {fetchAll, FetchAllParameters} from '../../utils';
 import {Artwork} from './artworkType';
 
-export const fetchAllArtworks = createAsyncThunk('artwork/fetchAll', async ({offset, limit, fields, filters, orders}: FetchAllParameters) =>
-    fetchAll<Artwork>('artwork', offset, limit, fields, filters, orders)
+export const fetchAllArtworks = createAsyncThunk('artwork/fetchAll', async (fetchAllParameters: FetchAllParameters) =>
+    fetchAll<Artwork>('artwork', fetchAllParameters)
 );
 
 const artworksAdapter = createEntityAdapter<Artwork>({});

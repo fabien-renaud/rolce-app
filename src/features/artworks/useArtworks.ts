@@ -2,6 +2,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {State} from 'store';
 import {Artwork} from './artworkType';
 import {fetchAllArtworks, selectAllArtworks} from './artworksSlice';
+import {FetchAllParameters} from '../../utils';
 
 export const useArtworks = () => {
     const dispatch = useDispatch();
@@ -13,12 +14,6 @@ export const useArtworks = () => {
         artworks,
         fetching,
         contentRange,
-        fetchArtworks: (
-            offset?: number,
-            limit?: number,
-            fields?: string[],
-            filters?: {key: string; value: string | null}[],
-            orders?: {key: string; value: string | null}[]
-        ) => dispatch(fetchAllArtworks({offset, limit, fields, filters, orders}))
+        fetchArtworks: (fetchAllParameters: FetchAllParameters) => dispatch(fetchAllArtworks(fetchAllParameters))
     };
 };

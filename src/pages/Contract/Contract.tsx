@@ -18,7 +18,7 @@ const Contract = () => {
 
     // Fetch contract at page loading
     useEffect(() => {
-        fetchContractMetadata(undefined, undefined, ['reference', 'name', 'account(name)'], [], [{key: 'name', value: 'asc'}]);
+        fetchContractMetadata({fields: ['reference', 'name', 'account(name)'], orders: [{key: 'name', value: 'asc'}]});
     }, []);
 
     // Redirect to the first contract of the list if no reference is given

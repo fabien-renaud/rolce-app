@@ -3,8 +3,8 @@ import {State} from 'store';
 import {Language} from './languageType';
 import {fetchAll, FetchAllParameters} from '../../utils';
 
-export const fetchAllLanguages = createAsyncThunk('language/fetchAll', async ({offset, limit, fields, filters, orders}: FetchAllParameters) =>
-    fetchAll<Language>('language', offset, limit, fields, filters, orders)
+export const fetchAllLanguages = createAsyncThunk('language/fetchAll', async (fetchAllParameters: FetchAllParameters) =>
+    fetchAll<Language>('language', fetchAllParameters)
 );
 
 const languagesAdapter = createEntityAdapter<Language>({});

@@ -2,6 +2,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {State} from 'store';
 import {Language} from './languageType';
 import {fetchAllLanguages, selectAllLanguages} from './languagesSlice';
+import {FetchAllParameters} from '../../utils';
 
 export const useLanguages = () => {
     const dispatch = useDispatch();
@@ -13,12 +14,6 @@ export const useLanguages = () => {
         languages,
         fetching,
         contentRange,
-        fetchLanguages: (
-            offset?: number,
-            limit?: number,
-            fields?: string[],
-            filters?: {key: string; value: string | null}[],
-            orders?: {key: string; value: string | null}[]
-        ) => dispatch(fetchAllLanguages({offset, limit, fields, filters, orders}))
+        fetchLanguages: (fetchAllParameters: FetchAllParameters) => dispatch(fetchAllLanguages(fetchAllParameters))
     };
 };

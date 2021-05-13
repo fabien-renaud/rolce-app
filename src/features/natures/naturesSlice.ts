@@ -3,8 +3,8 @@ import {State} from 'store';
 import {Nature} from './natureType';
 import {fetchAll, FetchAllParameters} from '../../utils';
 
-export const fetchAllNatures = createAsyncThunk('nature/fetchAll', async ({offset, limit, fields, filters}: FetchAllParameters) =>
-    fetchAll<Nature>('nature', offset, limit, fields, filters)
+export const fetchAllNatures = createAsyncThunk('nature/fetchAll', async (fetchAllParameters: FetchAllParameters) =>
+    fetchAll<Nature>('nature', fetchAllParameters)
 );
 
 const naturesAdapter = createEntityAdapter<Nature>({});

@@ -32,10 +32,10 @@ const RightForm = ({contract, form, setSaving}: RightFormProps) => {
         contract.type === CONTRACT_TYPE.ACQUISITION ? [{value: 'Acquisition'}, {value: 'Suspension'}] : [{value: 'Vente'}, {value: 'Holdback'}];
 
     useEffect(() => {
-        fetchArtworks(0, 10, ['id', 'value:title'], [], [{key: 'title', value: 'asc'}]);
-        fetchTerritories(undefined, undefined, ['id', 'code', 'label', 'parentId']);
-        fetchNatures(undefined, undefined, ['id', 'code', 'label', 'parentId', 'nature_activity(id, label)']);
-        fetchLanguages(0, 10, ['id', 'value'], [], [{key: 'value', value: 'asc'}]);
+        fetchArtworks({offset: 0, limit: 10, fields: ['id', 'value:title'], orders: [{key: 'title', value: 'asc'}]});
+        fetchTerritories({fields: ['id', 'code', 'label', 'parentId']});
+        fetchNatures({fields: ['id', 'code', 'label', 'parentId', 'nature_activity(id, label)']});
+        fetchArtworks({offset: 0, limit: 10, fields: ['id', 'value'], orders: [{key: 'value', value: 'asc'}]});
     }, []);
 
     useEffect(() => {
@@ -63,10 +63,22 @@ const RightForm = ({contract, form, setSaving}: RightFormProps) => {
     };
 
     const handleOnArtworkSearch = (value: string) =>
-        fetchArtworks(0, 10, ['id', 'value:title'], [{key: 'title', value: `ilike.*${value}*`}], [{key: 'title', value: 'asc'}]);
+        fetchArtworks({
+            offset: 0,
+            limit: 10,
+            fields: ['id', 'value:title'],
+            filters: [{key: 'title', value: `ilike.*${value}*`}],
+            orders: [{key: 'title', value: 'asc'}]
+        });
 
     const handleOnLanguageSearch = (value: string) =>
-        fetchLanguages(0, 10, ['id', 'value'], [{key: 'value', value: `ilike.*${value}*`}], [{key: 'value', value: 'asc'}]);
+        fetchLanguages({
+            offset: 0,
+            limit: 10,
+            fields: ['id', 'value'],
+            filters: [{key: 'value', value: `ilike.*${value}*`}],
+            orders: [{key: 'value', value: 'asc'}]
+        });
 
     const onFinish = async () => {
         setSaving('Saving');

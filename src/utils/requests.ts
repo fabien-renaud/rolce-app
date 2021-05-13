@@ -8,11 +8,7 @@ export type FetchAllParameters = {
 
 export const fetchAll = async <T>(
     collection: string,
-    offset?: number,
-    limit?: number,
-    fields?: string[],
-    filters?: {key: string; value: string | null}[],
-    orders?: {key: string; value: string | null}[]
+    {offset, limit, fields, filters, orders}: FetchAllParameters
 ): Promise<{datas: T[]; contentRange: string}> => {
     const urlFilters: string | undefined = filters?.reduce((acc, {key, value}) => `${acc}&${key}=${value}`, '');
     const urlOrders: string | undefined = orders?.reduce((acc, {key, value}) => `${acc}${key}.${value},`, '&order=').slice(0, -1);

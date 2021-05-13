@@ -2,6 +2,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {State} from 'store';
 import {Territory} from './territoryType';
 import {fetchAllTerritories, selectAllTerritories} from './territoriesSlice';
+import {FetchAllParameters} from '../../utils';
 
 export const useTerritories = () => {
     const dispatch = useDispatch();
@@ -9,7 +10,6 @@ export const useTerritories = () => {
 
     return {
         territories,
-        fetchTerritories: (offset?: number, limit?: number, fields?: string[], filters?: {key: string; value: string | null}[]) =>
-            dispatch(fetchAllTerritories({offset, limit, fields, filters}))
+        fetchTerritories: (fetchAllParameters: FetchAllParameters) => dispatch(fetchAllTerritories(fetchAllParameters))
     };
 };

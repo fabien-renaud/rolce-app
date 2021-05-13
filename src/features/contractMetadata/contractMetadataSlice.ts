@@ -3,8 +3,8 @@ import {State} from 'store';
 import {ContractMetadata} from './contractMetadataType';
 import {fetchAll, FetchAllParameters} from '../../utils';
 
-export const fetchContractMetadata = createAsyncThunk('contractMetadata/fetchAll', async ({offset, limit, fields, filters, orders}: FetchAllParameters) =>
-    fetchAll<ContractMetadata>('contract', offset, limit, fields, filters, orders)
+export const fetchContractMetadata = createAsyncThunk('contractMetadata/fetchAll', async (fetchAllParameters: FetchAllParameters) =>
+    fetchAll<ContractMetadata>('contract', fetchAllParameters)
 );
 
 const contractMetadataAdapter = createEntityAdapter<ContractMetadata>({
