@@ -14,6 +14,7 @@ const contractMetadataAdapter = createEntityAdapter<ContractMetadata>({
 export const contractMetadataSlice = createSlice({
     name: 'contractMetadata',
     initialState: contractMetadataAdapter.getInitialState({
+        error: '',
         loading: false
     }),
     reducers: {},
@@ -23,6 +24,10 @@ export const contractMetadataSlice = createSlice({
         });
         builder.addCase(fetchContractMetadata.fulfilled, (state, action) => {
             contractMetadataAdapter.upsertMany(state, action.payload.datas);
+            state.loading = false;
+        });
+        builder.addCase(fetchContractMetadata.rejected, (state, action) => {
+            state.error = action.error.message ?? 'An error has occurred';
             state.loading = false;
         });
     }
