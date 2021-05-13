@@ -1,20 +1,16 @@
-import {Col, DatePicker, Empty, Form, FormInstance, Input, InputNumber, Radio, Row, Select, Spin, TreeSelect} from 'antd';
-import React, {useEffect, useState} from 'react';
+import {Col, DatePicker, Empty, Form, FormInstance, Input, InputNumber, Radio, Row, Select, Spin, TreeSelect, message} from 'antd';
+import React, {SetStateAction, useEffect, useState} from 'react';
 import {Territory, useTerritories} from '../../features/territories';
 import {Nature, useNatures} from '../../features/natures';
 import {Activity} from '../../features/activities';
-import {createDataTree, currencyFormatter, currencyParser, DataTree} from '../../utils';
+import {createDataTree, currencyFormatter, currencyParser, DataTree, geAllNestedChildrenIds} from '../../utils';
 import {useLanguages} from '../../features/languages';
 import {useArtworks} from '../../features/artworks';
 import {CONTRACT_TYPE, ContractType} from '../../features/contracts';
+import {BillingTerm, RightDto} from '../../features/rights/rightType';
+import {createRight} from '../../features/rights/rightService';
 
 const {SHOW_PARENT} = TreeSelect;
-
-type BillingTerm = {
-    activityId: string;
-    artworkId: string;
-    price: number;
-};
 
 type TerritoryTree = DataTree & Partial<Territory>;
 type NatureTree = DataTree & Partial<Nature>;
@@ -22,9 +18,10 @@ type NatureTree = DataTree & Partial<Nature>;
 type RightFormProps = {
     contract: {reference: string; name: string; type: ContractType};
     form: FormInstance;
+    setSaving: SetStateAction<any>;
 };
 
-const RightForm = ({contract, form}: RightFormProps) => {
+const RightForm = ({contract, form, setSaving}: RightFormProps) => {
     const {territories, fetchTerritories} = useTerritories();
     const [territoriesTree, setTerritoriesTree] = useState<TerritoryTree[]>([]);
     const {natures, fetchNatures} = useNatures();
@@ -71,26 +68,41 @@ const RightForm = ({contract, form}: RightFormProps) => {
     const handleOnLanguageSearch = (value: string) =>
         fetchLanguages(0, 10, ['id', 'value'], [{key: 'value', value: `ilike.*${value}*`}], [{key: 'value', value: 'asc'}]);
 
-    const onFinish = () => {
+    const onFinish = async () => {
+        setSaving('Saving');
         const price = form.getFieldValue('price');
         const billingTerms: BillingTerm[] = [];
-        form.getFieldValue('activities').forEach((activity: string) => {
-            form.getFieldValue('artworks').forEach((artwork: string) => {
-                billingTerms.push({activityId: activity, artworkId: artwork, price});
+        form.getFieldValue('activities').forEach(({id: activityId}: {id: string}) => {
+            form.getFieldValue('artworks').forEach(({value: artworkId}: {value: string}) => {
+                billingTerms.push({activityId, artworkId, price});
             });
         });
-        const rightDto = {
-            contratId: form.getFieldValue('contract'),
-            type: form.getFieldValue('contract'),
+        const formTerritories: string[] = [...new Set(form.getFieldValue('territories'))] as string[];
+        const territoriesId: string[] = formTerritories.reduce(
+            (acc, territory) => [...acc, ...geAllNestedChildrenIds(territoriesTree, territory)],
+            formTerritories
+        );
+        const formNatures: string[] = [...new Set(form.getFieldValue('natures'))] as string[];
+        const naturesId: string[] = formNatures.reduce((acc, nature) => [...acc, ...geAllNestedChildrenIds(naturesTree, nature)], formNatures);
+        const rightDto: RightDto = {
+            name: form.getFieldValue('name'),
+            contractId: form.getFieldValue('contract'),
+            type: form.getFieldValue('type'),
             billingTerms,
             beginAt: form.getFieldValue('dateStart'),
             endAt: form.getFieldValue('dateEnd'),
-            hasExclusivity: form.getFieldValue('hasExclusivity'),
-            languagesId: new Set(form.getFieldValue('languages')),
-            naturesId: new Set(form.getFieldValue('languages')),
-            territoriesId: new Set(form.getFieldValue('languages'))
+            hasExclusivity: !!form.getFieldValue('hasExclusivity'),
+            languagesId: form.getFieldValue('languages'),
+            naturesId,
+            territoriesId
         };
-        console.log(rightDto);
+        createRight(rightDto)
+            .then((rights: string[]) => {
+                message.success(`${rights.length} droits créés avec succès !`);
+                form.resetFields();
+            })
+            .catch((error) => message.error(`Une erreur est survenue lors de la création de droits => ${error.message}`))
+            .finally(() => setSaving('Done'));
     };
 
     return (
@@ -105,32 +117,20 @@ const RightForm = ({contract, form}: RightFormProps) => {
                 sm: {span: 16}
             }}
             initialValues={{
+                name: contract.name,
                 hasExclusivity: 1,
                 type: contract.type === CONTRACT_TYPE.ACQUISITION ? 'Acquisition' : 'Vente',
                 contract: contract.name
             }}
             onFinish={onFinish}>
-            <Row key="Artworks">
-                <Col span={12} key="ArtworksAndContract">
-                    <Form.Item label="Oeuvres" name="artworks" rules={[{required: true, message: 'Merci de sélectionner au moins une oeuvre'}]}>
-                        <Select
-                            labelInValue
-                            mode="multiple"
-                            allowClear
-                            onSearch={handleOnArtworkSearch}
-                            placeholder="Rechercher une oeuvre"
-                            style={{width: '100%'}}
-                            notFoundContent={
-                                fetchingArtworks ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />
-                            }
-                            optionFilterProp="label"
-                            options={artworks.sort((aa, ab) => aa.value.localeCompare(ab.value)).map((artwork) => ({label: artwork.value, value: artwork.id}))}
-                            maxTagCount="responsive"
-                        />
+            <Row key="ArtworksAndContract">
+                <Col span={12} key="RightName">
+                    <Form.Item label="Nom" name="name" rules={[{required: true, message: 'Un nom est obligatoire'}]}>
+                        <Input />
                     </Form.Item>
                 </Col>
                 <Col span={12} key="Contract">
-                    <Form.Item label="Contract" name="contract" rules={[{required: true, message: 'Un contrat doit être spécifié'}]}>
+                    <Form.Item label="Contrat" name="contract" rules={[{required: true, message: 'Un contrat doit être spécifié'}]}>
                         <Input key={contract.reference} disabled />
                     </Form.Item>
                 </Col>
@@ -194,6 +194,24 @@ const RightForm = ({contract, form}: RightFormProps) => {
                 </Col>
             </Row>
             <Row key="Territories">
+                <Col span={12} key="Artworks">
+                    <Form.Item label="Oeuvres" name="artworks" rules={[{required: true, message: 'Merci de sélectionner au moins une oeuvre'}]}>
+                        <Select
+                            labelInValue
+                            mode="multiple"
+                            allowClear
+                            onSearch={handleOnArtworkSearch}
+                            placeholder="Rechercher une oeuvre"
+                            style={{width: '100%'}}
+                            notFoundContent={
+                                fetchingArtworks ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Pas de données" />
+                            }
+                            optionFilterProp="label"
+                            options={artworks.sort((aa, ab) => aa.value.localeCompare(ab.value)).map((artwork) => ({label: artwork.value, value: artwork.id}))}
+                            maxTagCount="responsive"
+                        />
+                    </Form.Item>
+                </Col>
                 <Col span={12} key="TerritoriesSelection">
                     <Form.Item label="Territoires" name="territories" rules={[{required: true, message: 'Merci de sélectionner au moins un territoire'}]}>
                         <TreeSelect
