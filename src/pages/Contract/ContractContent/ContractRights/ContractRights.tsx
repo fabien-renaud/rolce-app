@@ -102,13 +102,10 @@ const ContractRights = ({contract: {reference, name, type}}: ContractRightProps)
     const onCancel = () => setVisible(false);
     const [form] = Form.useForm();
     const onSubmit = async () =>
-        form
-            .validateFields()
-            .then(() => {
-                form.submit();
-                setVisible(false);
-            })
-            .catch(console.error);
+        form.validateFields().then(() => {
+            form.submit();
+            setVisible(false);
+        });
 
     return (
         <>
