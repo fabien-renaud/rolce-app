@@ -1,5 +1,6 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchContractMetadata, selectAllContractMetadata, selectContractMetadataIds} from './contractMetadataSlice';
+import {FetchAllParameters} from '../../utils';
 
 export const useContractMetadata = () => {
     const dispatch = useDispatch();
@@ -9,6 +10,6 @@ export const useContractMetadata = () => {
     return {
         contractMetadata,
         contractMetadataIds,
-        fetchContractMetadata: () => dispatch(fetchContractMetadata())
+        fetchContractMetadata: (fetchAllParameters: FetchAllParameters) => dispatch(fetchContractMetadata(fetchAllParameters))
     };
 };

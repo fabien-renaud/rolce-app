@@ -1,5 +1,5 @@
 export type ContractMetadata = {
     reference: string;
     name: string;
-    accountName: string;
+    account?: {name: string};
 };

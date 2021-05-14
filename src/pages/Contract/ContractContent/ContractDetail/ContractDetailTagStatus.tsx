@@ -5,8 +5,7 @@ type ContractDetailStatusProps = {
     status: ContractStatus;
 };
 
-const ContractDetailTagStatus = (props: ContractDetailStatusProps) => {
-    const {status} = props;
+const ContractDetailTagStatus = ({status}: ContractDetailStatusProps) => {
     switch (status) {
         case CONTRACT_STATUS.INTEREST:
             return <Tag color="magenta">Intérêt</Tag>;

@@ -1,9 +1,11 @@
 import {createAsyncThunk, createEntityAdapter, createSlice} from '@reduxjs/toolkit';
 import {State} from 'store';
-import contractMetadataService from './contractMetadataService';
 import {ContractMetadata} from './contractMetadataType';
+import {fetchAll, FetchAllParameters} from '../../utils';
 
-export const fetchContractMetadata = createAsyncThunk('contractMetadata/fetchAll', contractMetadataService.fetchAll);
+export const fetchContractMetadata = createAsyncThunk('contractMetadata/fetchAll', async (fetchAllParameters: FetchAllParameters) =>
+    fetchAll<ContractMetadata>('contract', fetchAllParameters)
+);
 
 const contractMetadataAdapter = createEntityAdapter<ContractMetadata>({
     selectId: (metadata) => metadata.reference
@@ -12,6 +14,7 @@ const contractMetadataAdapter = createEntityAdapter<ContractMetadata>({
 export const contractMetadataSlice = createSlice({
     name: 'contractMetadata',
     initialState: contractMetadataAdapter.getInitialState({
+        error: '',
         loading: false
     }),
     reducers: {},
@@ -20,7 +23,11 @@ export const contractMetadataSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(fetchContractMetadata.fulfilled, (state, action) => {
-            contractMetadataAdapter.upsertMany(state, action.payload);
+            contractMetadataAdapter.upsertMany(state, action.payload.datas);
+            state.loading = false;
+        });
+        builder.addCase(fetchContractMetadata.rejected, (state, action) => {
+            state.error = action.error.message ?? 'An error has occurred';
             state.loading = false;
         });
     }
