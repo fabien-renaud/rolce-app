@@ -4,14 +4,14 @@ export type Contract = {
     status: ContractStatus;
     name: string;
     reference: string;
-    accountName: string;
+    account: {name: string};
     comment: string;
-    beginAt: string;
-    endAt: string;
+    begin_at: string;
+    end_at: string;
     totalAmount: number;
     currencyIso: string;
-    createdAt: Date;
-    updatedAt: Date;
+    created_at: Date;
+    updated_at: Date;
 };
 
 export type ContractType = 'ACQUISITION' | 'SALE';

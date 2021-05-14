@@ -1,6 +1,16 @@
-import {Collapse, Table, Typography} from 'antd';
+import {Button, Form, Space, Table, Typography} from 'antd';
+import {useState} from 'react';
+import {PlusCircleOutlined} from '@ant-design/icons';
+import {FormDrawer} from '../../../../components/FormDrawer';
+import {RightForm} from '../../../Right';
+import {ContractType} from '../../../../features/contracts';
+import {SavingStatus} from '../../../../utils';
 
-const ContractRights = () => {
+type ContractRightProps = {
+    contract: {reference: string; name: string; type: ContractType};
+};
+
+const ContractRights = ({contract: {reference, name, type}}: ContractRightProps) => {
     const columns = [
         {
             title: 'Name',
@@ -86,16 +96,42 @@ const ContractRights = () => {
         }
     ];
 
+    const [visible, setVisible] = useState(false);
+    const [saving, setSaving] = useState<SavingStatus>('Initial');
+    const onClickNew = () => setVisible(true);
+    const onCancel = () => setVisible(false);
+    const [form] = Form.useForm();
+    const onSubmit = async () =>
+        form.validateFields().then(() => {
+            form.submit();
+            setVisible(false);
+        });
+
     return (
-        <Collapse defaultActiveKey={['rights']} ghost>
-            <Collapse.Panel key="rights" header={<Typography.Text strong>Droits</Typography.Text>}>
-                <Table
-                    // @ts-ignore
-                    columns={columns}
-                    dataSource={data}
-                />
-            </Collapse.Panel>
-        </Collapse>
+        <>
+            <FormDrawer
+                cancelText="Annuler"
+                submitText="Valider"
+                title="Création de droits"
+                visible={visible}
+                onCancel={onCancel}
+                onSubmit={onSubmit}
+                saving={saving}>
+                <RightForm contract={{reference, name, type}} form={form} setSaving={setSaving} />
+            </FormDrawer>
+            <Space style={{display: 'flex', justifyContent: 'space-between', marginBottom: 8, marginRight: 24, marginLeft: 24}}>
+                <Typography.Text strong>Droits</Typography.Text>
+                <Button icon={<PlusCircleOutlined />} onClick={onClickNew}>
+                    Nouveau
+                </Button>
+            </Space>
+            <Table
+                style={{marginLeft: 24, marginRight: 24}}
+                // @ts-ignore
+                columns={columns}
+                dataSource={data}
+            />
+        </>
     );
 };
 

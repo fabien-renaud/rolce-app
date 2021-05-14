@@ -12,6 +12,7 @@ const contractsAdapter = createEntityAdapter<Contract>({
 export const contractsSlice = createSlice({
     name: 'contracts',
     initialState: contractsAdapter.getInitialState({
+        error: '',
         loading: false
     }),
     reducers: {},
@@ -21,6 +22,10 @@ export const contractsSlice = createSlice({
         });
         builder.addCase(fetchContractById.fulfilled, (state, action) => {
             if (action.payload) contractsAdapter.upsertOne(state, action.payload);
+            state.loading = false;
+        });
+        builder.addCase(fetchContractById.rejected, (state, action) => {
+            state.error = action.error.message ?? 'An error has occurred';
             state.loading = false;
         });
     }
